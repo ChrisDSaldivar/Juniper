@@ -1,0 +1,30 @@
+{
+  "name": "panopticon",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "nodemon ./start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisDSaldivar/Panopticon.git"
+  },
+  "author": "Chris Saldivar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisDSaldivar/Panopticon/issues"
+  },
+  "homepage": "https://github.com/ChrisDSaldivar/Panopticon#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "connect-redis": "^4.0.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "pug": "^2.0.4",
+    "redis": "^3.0.2",
+    "sqlite3": "^4.1.1",
+    "winston": "^3.2.1"
+  }
+}

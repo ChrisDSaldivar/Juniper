@@ -1,0 +1,63 @@
+.container {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+.card {
+    height: 50%;
+    width: 40%;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background-color: whitesmoke;
+    font-family: Helvetica, sans-serif;
+    grid-template-rows: 1fr 3fr;
+}
+
+.connect-form {
+    display: grid;
+    place-items: center;
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: 50px;
+}
+
+.nameRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+}
+
+input[type='text'] {
+    background-color: inherit;
+    font-size: 1em;
+    padding-bottom: 5px;
+    border: none;
+    outline: none;
+    border-bottom: solid rgb(27, 197, 112) 1px;
+}
+
+button {
+    outline: none;
+    border: none;
+    background-color: inherit;
+    font-size: 1.25em;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(27, 197, 112);
+}
+
+input[type='button']:active {
+    background-color: rgb(21, 146, 84);
+}
+
+@media only screen and (max-width: 940px) {
+    input[type='text'] { 
+       font-size: .75em; 
+    }
+}
