@@ -9,13 +9,23 @@ let conn = null;
 const videoElem = document.getElementById("screen");
 const audioElem = document.getElementById("voice");
 
+ws.commands = {
+    example,
+    broadcast,
+    watch,
+};
 
 ws.onopen = (event) => {
     console.log("WebSocket is open now.");
     ws.send('PING');
 };
 ws.onmessage = (event) => {
-    console.log(`WebSocket message received: ${event.data}`);
+    const msg = JSON.parse(event.data);
+    console.log(`WebSocket message received: ${msg}`);
+    const cmd = msg.cmd;
+    if (ws.commands[cmd]) {
+        ws.commands[cmd](event);
+    }
 }
 ws.onclose = (event) => {
     console.log(`Websocket closed!`)
@@ -63,4 +73,29 @@ function stopCapture (evt) {
 
     audioTracks.forEach(track => track.stop());
     audioElem.srcObject = null;
+}
+
+const peerConnections = {};
+const config = {
+  iceServers: [
+    {
+      urls: ["stun:stun.l.google.com:19302"]
+    }
+  ]
+};
+
+// ws.on("answer", (id, description) => {
+//     peerConnections[id].setRemoteDescription(description);
+// });
+
+function example (event) {
+    console.log(`Example event: ${event.data}`);
+}
+
+function broadcast (event) {
+    console.log(`Broadcast event: ${event.data}`);
+}
+
+function watch (event) {
+    console.log(`Watch event: ${event.data}`);
 }
