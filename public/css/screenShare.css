@@ -4,3 +4,25 @@
     height: 100%;
     width: 100%;
 }
+
+pre {
+    background-color: white;
+}
+
+#screen {
+    border: 1px solid #999;
+    width: 98%;
+    max-width: 1080px;
+}
+
+.error {
+    color: red;
+}
+
+.warn {
+    color: orange;
+}
+
+.info {
+    color: darkgreen;
+}

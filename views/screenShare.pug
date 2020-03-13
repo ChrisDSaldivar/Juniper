@@ -8,5 +8,8 @@ html
   body
     .container
         button#shareScreen--button Share Screen
+        button#stopCapture--button Stop Capture
+        video#screen(autoplay)
+        audio#voice(autoplay)
     script(src="/js/stream.js")
     script(src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js")
