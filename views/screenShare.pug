@@ -7,10 +7,11 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
     .container
-        button#shareScreen--button Share Screen
-        button#stopCapture--button Stop Capture
-        div#firstname
-        video#screen(autoplay)
-        audio#voice(autoplay)
+        h2#firstname
+        .stream-container
+          video#screen(autoplay)
+          audio#voice(autoplay)
+        .controls
+          button#shareScreen--button Share Screen
+          button#stopCapture--button Stop Capture
     script(src="/js/stream.js")
-    script(src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js")

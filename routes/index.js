@@ -6,8 +6,7 @@ const { catchErrors }    = require('../handlers/errorHandlers');
 
 router.use('/student', validateStudentConnection);
 router.use('/instructor', validateInstructorConnection);
-router.use('/student', validateStudentConnection);
-router.use('/ta', validateAssistantConnection);
+router.use('/assistant', validateAssistantConnection);
 
 router.get('/', 
     checkRedirect,
@@ -24,14 +23,17 @@ router.get('/student',
 router.get('/screens', 
     catchErrors(studentController.updateScreenshot)
 );
+router.get('/students', 
+    catchErrors(courseController.getConnectedStudents)
+)
 
 function checkRedirect (req, res, next) {
     if (req.session.student) {
         return res.redirect('/student');
     } else if (req.session.instructor) {
         return res.redirect('/instructor');
-    } else if (req.session.ta) {
-        return res.redirect('/ta');
+    } else if (req.session.assistant) {
+        return res.redirect('/assistant');
     }
     next();
 }

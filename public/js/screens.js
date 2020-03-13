@@ -3,9 +3,21 @@
 const ws = new WebSocket('ws://localhost:9090');
 
 document.querySelector('body').onload = main;
-var students = ['student 1','student 2','student 3', 'student 4', 'student 5'];
+let students = [];
 
-function main(){
+async function main(){
+    const res = await fetch('http://localhost:9090/students', {
+        method: "GET",
+    });
+    if (res.status !== 200) {
+        return alert('Failed to fetch students');
+    }
+    const data = await res.json();
+    students = data.students;
+    renderStudents();
+}
+
+function renderStudents () {
     students.forEach((student) => {
         let container = document.getElementById("container");
 
@@ -33,5 +45,3 @@ function main(){
         container.appendChild(connectedStudent);
     });
 }
-
-

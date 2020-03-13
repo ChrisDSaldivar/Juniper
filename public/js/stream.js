@@ -2,9 +2,6 @@
 document.querySelector('body').onload = initParams;
 
 const ws = new WebSocket('ws://localhost:9090');
-let lastPeerId = null;
-let peer = null; // own peer object
-let conn = null;
 
 // Element refs
 const videoElem = document.getElementById("screen");
