@@ -1,5 +1,5 @@
 {
-  "name": "panopticon",
+  "name": "Juniper",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChrisDSaldivar/Panopticon.git"
+    "url": "git+https://github.com/ChrisDSaldivar/Juniper.git"
   },
   "author": "Chris Saldivar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ChrisDSaldivar/Panopticon/issues"
+    "url": "https://github.com/ChrisDSaldivar/Juniper/issues"
   },
-  "homepage": "https://github.com/ChrisDSaldivar/Panopticon#readme",
+  "homepage": "https://github.com/ChrisDSaldivar/Juniper#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.0",
     "connect-redis": "^4.0.4",
