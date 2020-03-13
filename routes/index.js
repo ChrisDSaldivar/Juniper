@@ -13,10 +13,16 @@ router.get('/',
     checkRedirect,
     catchErrors(courseController.getCourses)
 );
-router.post('/connect', catchErrors(courseController.connect));
+router.post('/connect', 
+    catchErrors(courseController.connect)
+);
 
 router.get('/student',
     catchErrors(studentController.screenShare)
+);
+
+router.get('/screens', 
+    catchErrors(studentController.updateScreenshot)
 );
 
 function checkRedirect (req, res, next) {
@@ -39,7 +45,7 @@ function validateStudentConnection (req, res, next) {
 }
 
 function validateTAConnection (req, res, next) {
-    if (!req.session.connected && !req.session.tag) {
+    if (!req.session.connected && !req.session.ta) {
         return res.redirect('/');
     } else {
         next();

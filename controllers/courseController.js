@@ -1,4 +1,4 @@
-const Course           = require('../models/courseModel.js');
+// const Course           = require('../models/courseModel.js.js');
 const {connectValidator} = require('../validators/CourseValidators');
 
 const validCourses = ['CS1114', 'CS2124', 'CS3613'];
@@ -23,6 +23,7 @@ exports.connect = async (req, res) => {
         req.session.lastName = lastName;
         req.session.courseNumber = courseNumber;
         req.session.student = true;
+
         return res.sendStatus(200);
     }
     catch (err) {
