@@ -28,7 +28,7 @@ router.get('/students',
 )
 
 function checkRedirect (req, res, next) {
-    if (req.session.student) {
+    if (req.session.student === false) {
         return res.redirect('/student');
     } else if (req.session.instructor) {
         return res.redirect('/instructor');

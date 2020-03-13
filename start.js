@@ -1,6 +1,7 @@
 require('dotenv').config({ path: 'config.env' });
 const WebSocket = require('ws');
 const app       = require('./app');
+const redisClient = require('redis').createClient();
 
 const clients = [];
 
@@ -14,13 +15,22 @@ const wsServer = new WebSocket.Server({
     noServer: true,
 })
 
-wsServer.on('connection', function connection (ws, request) {
-    const firstName = request.session.firstName;
+wsServer.on('connection', function connection (ws, req) {
+    const firstName = req.session.firstName;
     ws.firstName = firstName;
     clients.push(ws);
+    console.log(`Current clients: ${clients.length}`)
+    
     ws.on('message', function incoming (message) {
         console.log(`received: ${message} from: ${firstName}`);
         ws.send(JSON.stringify({cmd: 'broadcast'}));
+    });
+
+    ws.on('close', (client) => {
+        redisClient.lrem(`students-${req.session.courseNumber}`,"1",`${req.session.firstName} ${req.session.lastName}`);
+        let clientIndex = clients.indexOf(client);
+        clients.splice(clientIndex, 1);
+        console.log(`Remaining clients: ${clients.length}`);
     });
 });
 

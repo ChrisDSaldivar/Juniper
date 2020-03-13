@@ -7,7 +7,7 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
     .container
-        h2#firstname
+        h2=`${firstName} ${lastName}`
         .stream-container
           video#screen(autoplay)
           audio#voice(autoplay)

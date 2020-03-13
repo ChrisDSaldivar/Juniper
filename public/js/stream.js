@@ -1,5 +1,4 @@
 'use strict';
-document.querySelector('body').onload = initParams;
 
 const ws = new WebSocket('ws://localhost:9090');
 
@@ -15,7 +14,7 @@ ws.commands = {
 
 ws.onopen = (event) => {
     console.log("WebSocket is open now.");
-    ws.send(JSON.stringify({PING: "PINNG"}));
+    ws.send(JSON.stringify({PING: "PING"}));
 };
 ws.onmessage = (event) => {
     const msg = JSON.parse(event.data);
@@ -31,15 +30,6 @@ ws.onclose = (event) => {
 
 document.getElementById('shareScreen--button').onclick = shareScreen;
 document.getElementById('stopCapture--button').onclick = stopCapture;
-
-function initParams(){
-    const urlParams = new URLSearchParams(window.location.search);
-    const myParam = urlParams.get('firstname');
-    let firstname = document.getElementById('firstname');
-    let header = document.createElement('h1');
-    header.textContent = myParam;
-    firstname.appendChild(header);
-}
 
 async function shareScreen () {
     console.log(navigator.mediaDevices.getSupportedConstraints());

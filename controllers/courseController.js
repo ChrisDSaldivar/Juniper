@@ -39,7 +39,6 @@ exports.connect = async (req, res) => {
 };
 
 exports.getConnectedStudents = async (req, res) => {
-    // const students = ["Student 1", "Student 2", "Student 3", "Student 4"];
     const numStudents = await redisClient.get(`students-${req.session.courseNumber}_count`);
     const students = await redisClient.lrange(`students-${req.session.courseNumber}`, "0", numStudents);
 
