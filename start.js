@@ -24,10 +24,11 @@ wsServer.on('connection', function connection (ws, request) {
     });
 });
 
+
 /* 
  Handle the HTTP upgrade ourselves so we can capture the request object's session property
  Then we pass it by emitting the connection event ourselves so we have access to the request
- in wsSerer.on('connection'). From their we can access the ws session (although we won't receive
+ in wsServer.on('connection'). From their we can access the ws session (although we won't receive
  updates to the session unless the user reloads
 */
 server.on('upgrade', function(request, socket, head) {
