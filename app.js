@@ -29,6 +29,8 @@ const sess = session({
 });
 
 app.use(sess);
+// bind the sessionParser here so we can use it in the websocket server
+app.set('sessionParser', sess);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());

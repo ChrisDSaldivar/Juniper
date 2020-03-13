@@ -9,11 +9,6 @@ router.use('/instructor', validateInstructorConnection);
 router.use('/student', validateStudentConnection);
 router.use('/ta', validateTAConnection);
 
-router.get('*', (req, res, next) => {
-    console.log(req.session);
-    next();
-})
-
 router.get('/', 
     checkRedirect,
     catchErrors(courseController.getCourses)
@@ -26,12 +21,13 @@ router.get('/student',
 
 function checkRedirect (req, res, next) {
     if (req.session.student) {
-        res.redirect('/student');
+        return res.redirect('/student');
     } else if (req.session.instructor) {
-        res.redirect('/instructor');
+        return res.redirect('/instructor');
     } else if (req.session.ta) {
-        res.redirect('/ta');
+        return res.redirect('/ta');
     }
+    next();
 }
 
 function validateStudentConnection (req, res, next) {
@@ -43,7 +39,7 @@ function validateStudentConnection (req, res, next) {
 }
 
 function validateTAConnection (req, res, next) {
-    if (!req.session.connected && !req.session.TA) {
+    if (!req.session.connected && !req.session.tag) {
         return res.redirect('/');
     } else {
         next();

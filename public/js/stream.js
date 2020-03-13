@@ -17,6 +17,9 @@ ws.onopen = (event) => {
 ws.onmessage = (event) => {
     console.log(`WebSocket message received: ${event.data}`);
 }
+ws.onclose = (event) => {
+    console.log(`Websocket closed!`)
+}
 
 document.getElementById('shareScreen--button').onclick = shareScreen;
 document.getElementById('stopCapture--button').onclick = stopCapture;
