@@ -20,14 +20,17 @@ wsServer.on('connection', function connection (ws, request) {
     clients.push(ws);
     ws.on('message', function incoming (message) {
         console.log(`received: ${message} from: ${firstName}`);
-        ws.send('PONG');
+        ws.send(JSON.stringify({cmd: 'broadcast'}));
     });
 });
 
-// Handle the HTTP upgrade ourselves so we can capture the request object's session property
-// Then we pass it by emitting the connection event ourselves so we have access to the request
-// in wsServer.on('connection'). From their we can access the ws session (although we won't receive
-// updates to the session unless the user reloads
+
+/* 
+ Handle the HTTP upgrade ourselves so we can capture the request object's session property
+ Then we pass it by emitting the connection event ourselves so we have access to the request
+ in wsServer.on('connection'). From their we can access the ws session (although we won't receive
+ updates to the session unless the user reloads
+*/
 server.on('upgrade', function(request, socket, head) {
     app.get('sessionParser')(request, {}, () => {
         if (!request.session.student && !request.session.instructor && !request.session.ta) {
