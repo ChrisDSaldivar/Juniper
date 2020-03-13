@@ -1,4 +1,4 @@
-// const Course           = require('../models/courseModel.js.js');
+// const Course           = require('../models/courseModel');
 const {connectValidator} = require('../validators/CourseValidators');
 
 const validCourses = ['CS1114', 'CS2124', 'CS3613'];

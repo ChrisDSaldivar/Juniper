@@ -33,7 +33,7 @@ wsServer.on('connection', function connection (ws, request) {
 */
 server.on('upgrade', function(request, socket, head) {
     app.get('sessionParser')(request, {}, () => {
-        if (!request.session.student && !request.session.instructor && !request.session.ta) {
+        if (!request.session.student && !request.session.instructor && !request.session.assistant) {
             socket.destroy();
             return;
         }

@@ -7,7 +7,7 @@ const { catchErrors }    = require('../handlers/errorHandlers');
 router.use('/student', validateStudentConnection);
 router.use('/instructor', validateInstructorConnection);
 router.use('/student', validateStudentConnection);
-router.use('/ta', validateTAConnection);
+router.use('/ta', validateAssistantConnection);
 
 router.get('/', 
     checkRedirect,
@@ -44,8 +44,8 @@ function validateStudentConnection (req, res, next) {
     }
 }
 
-function validateTAConnection (req, res, next) {
-    if (!req.session.connected && !req.session.ta) {
+function validateAssistantConnection (req, res, next) {
+    if (!req.session.connected && !req.session.assistant) {
         return res.redirect('/');
     } else {
         next();
