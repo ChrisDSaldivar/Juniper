@@ -36,9 +36,7 @@ function initParams(){
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('firstname');
     let firstname = document.getElementById('firstname');
-    let header = document.createElement('h1');
-    header.textContent = myParam;
-    firstname.appendChild(header);
+    firstname.textContent = myParam;
 }
 
 async function shareScreen () {
