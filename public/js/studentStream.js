@@ -71,6 +71,7 @@ async function receiveOffer (target, description) {
     };
 
     ws.send(JSON.stringify(msg));
+    shareScreen(target);
 
     // send connection candidates whenever they're available
     audioConnection.onicecandidate = (event) => {
@@ -87,4 +88,24 @@ async function receiveOffer (target, description) {
 
 async function recieveRemoteCandidate (msg) {
     await audioConnection.addIceCandidate(msg.candidate);
+}
+
+async function shareScreen (target) {
+    videoConnection = new RTCPeerConnection(config);
+    myVideo = await navigator.mediaDevices.getDisplayMedia({video: true});
+
+    myVideo.getTracks().forEach(track => videoConnection.addTrack(track, myVideo));
+
+    videoConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+            const msg = {
+                cmd: 'candidate',
+                target,
+                candidate: event.candidate
+            };
+            ws.send(JSON.stringify(msg));
+        }
+    };
+
+    
 }

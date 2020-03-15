@@ -38,9 +38,9 @@ function checkRedirect (req, res, next) {
     if (req.session.student) {
         return res.redirect('/student');
     } else if (req.session.instructor) {
-        return res.redirect('/instructor');
+        return res.redirect('/screens');
     } else if (req.session.assistant) {
-        return res.redirect('/assistant');
+        return res.redirect('/screens');
     }
     next();
 }

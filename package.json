@@ -28,5 +28,9 @@
     "uuid": "^7.0.2",
     "winston": "^3.2.1",
     "ws": "^7.2.3"
+  },
+  "resolutions": {
+    "pug/pug-code-gen/with/acorn": ">=5.7.4",
+    "sqlite3/node-pre-gyp/mkdirp/minimist": ">=1.2.2"
   }
 }

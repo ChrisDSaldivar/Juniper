@@ -18,6 +18,7 @@ document.querySelector('#shareScreen--button').onclick = initiateAudioStream;
 
 let   studentId;
 const studentScreen = document.getElementById("screen");
+let   videoConnection;
 
 const studentAudio  = document.getElementById("voice");
 let   audioConnection;
