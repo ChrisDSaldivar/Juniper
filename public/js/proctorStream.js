@@ -76,42 +76,11 @@ async function initiateAudioStream () {
 
 async function receiveAnswer (msg) {
     await audioConnection.setRemoteDescription(msg.description);
-
 }
 
 async function recieveRemoteCandidate (msg) {
     await audioConnection.addIceCandidate(msg.candidate);
 }
-
-
-// function offer (id, description) {
-//     peerConnection
-//         .setRemoteDescription(description)
-//         .then(() => peerConnection.createAnswer())
-//         .then(sdp => peerConnection.setLocalDescription(sdp))
-//         .then(() => {
-//             const msg = {
-//                 cmd: "answer",
-//                 id,
-//                 localDescription: peerConnection.localDescription
-//             }
-//             ws.send(JSON.stringify(msg));
-//         });
-//     peerConnection.ontrack = event => {
-
-//         video.srcObject = event.streams[0];
-//     };
-//     peerConnection.onicecandidate = event => {
-//         if (event.candidate) {
-//             const msg = {
-//                 cmd: "candidate",
-//                 id,
-//                 candidate: event.candidate
-//             }
-//             ws.send(JSON.stringify(msg));
-//         }
-//     };
-// }
 
 function initParams(){
     const urlParams = new URLSearchParams(window.location.search);

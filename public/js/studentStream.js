@@ -7,6 +7,7 @@ let audioConnection;
 let videoConnection;
 
 const proctorAudio  = document.getElementById("voice");
+const proctorScreen = document.getElementById("screen");
 let   myAudio;
 let   myVideo;
 
@@ -41,6 +42,8 @@ ws.onmessage = (event) => {
         receiveOffer(msg.target, msg.description);
     } else if (cmd === 'candidate') {
         recieveRemoteCandidate(msg);
+    } else if (cmd === 'answer') {
+        receiveAnswer(msg);
     }
 };
 
@@ -71,7 +74,7 @@ async function receiveOffer (target, description) {
     };
 
     ws.send(JSON.stringify(msg));
-    shareScreen(target);
+    // shareScreen(target);
 
     // send connection candidates whenever they're available
     audioConnection.onicecandidate = (event) => {
@@ -107,5 +110,23 @@ async function shareScreen (target) {
         }
     };
 
-    
+    videoConnection.ontrack = (event) => {
+        console.log('STUDENT DID RECEIVE VIDEO TRACK');
+        console.log(event.streams[0])
+        proctorScreen.srcObject = event.streams[0];
+    };
+
+    const description = await videoConnection.createOffer({offerToReceiveVideo: true});
+    await videoConnection.setLocalDescription(description);
+
+    const msg = {
+        cmd: 'offer',
+        target,
+        description: videoConnection.localDescription
+    };
+    ws.send(JSON.stringify(msg));
+}
+
+async function receiveAnswer (msg) {
+    await audioConnection.setRemoteDescription(msg.description);
 }

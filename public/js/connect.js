@@ -12,8 +12,8 @@ function main () {
 
 async function connect () {
     const data = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
+        firstName: document.getElementById('firstName').value.trim().toLowerCase(),
+        lastName: document.getElementById('lastName').value.trim().toLowerCase(),
         courseNumber: document.getElementById('courseNumber').value,
     }
     console.log(data)

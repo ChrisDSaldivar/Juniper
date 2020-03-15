@@ -34,7 +34,7 @@ exports.connect = async (req, res) => {
         req.session.courseNumber = courseNumber;
         let route = '/student';
         req.session.uuid = uuidV4();
-        if (firstName === 'chris' && lastName === 'saldivar') {
+        if (firstName === 'chris' && lastName === 'saldivar' || firstName === 'joseph' && lastName === 'branch' ) {
             req.session.instructor = true;
             route = '/screens'
         } else {
