@@ -1,12 +1,13 @@
 'use strict';
 
-const ws = new WebSocket('ws://localhost:9090');
+const ws = new WebSocket('wss://juniper.beer');
 
 document.querySelector('body').onload = main;
 let students = [];
+let idMap = {};
 
 async function main(){
-    const res = await fetch('http://localhost:9090/students', {
+    const res = await fetch('https://juniper.beer/students', {
         method: "GET",
     });
     if (res.status !== 200) {
@@ -23,20 +24,23 @@ function renderStudents () {
 
         let studentHeader = document.createElement('h2');
         studentHeader.align = "center";
-        studentHeader.textContent = student;
-        studentHeader.id = student;
+        const [ name, id ] = student.split(':');
+        idMap[name] = id;
+        studentHeader.textContent = name;
+        studentHeader.id = name;
 
         let studentImg = document.createElement('img');
         studentImg.src ="https://via.placeholder.com/100";
-        studentImg.alt = student;
-        studentImg.id = student;
+        studentImg.alt = name;
+        studentImg.id = name;
 
         let connectedStudent = document.createElement("div");
         connectedStudent.className = "card";
-        connectedStudent.id = student;
+        connectedStudent.id = name;
         connectedStudent.onclick = function oneOnOne(event){
-            let params = event.target.id;
-            window.location = `http://localhost:9090/student?firstname=${params}`;
+            const name = event.target.id;
+            const id = idMap[name];
+            window.location = `https://juniper.beer/student?id=${id}&name=${name}`;
             
         }
         connectedStudent.appendChild(studentImg);

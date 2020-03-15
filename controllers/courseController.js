@@ -2,8 +2,10 @@
 const {connectValidator} = require('../validators/CourseValidators');
 const redisClient        = require('redis').createClient();
 const {promisify}        = require('util');
+const uuidV4             = require('uuid').v4;
 redisClient.get = promisify(redisClient.get);
 redisClient.lrange = promisify(redisClient.lrange);
+redisClient.exists = promisify(redisClient.exists);
 
 const validCourses = ['CS1114', 'CS2124', 'CS3613'];
 
@@ -27,7 +29,9 @@ exports.connect = async (req, res) => {
         req.session.lastName = lastName;
         req.session.courseNumber = courseNumber;
         req.session.student = true;
-        redisClient.rpush(`students-${courseNumber}`, `${firstName} ${lastName}`);
+        req.session.uuid = uuidV4();
+        const sessionKey = `sess:${req.sessionID}`
+        redisClient.rpush(`students-${courseNumber}`, `${firstName} ${lastName}|${req.session.uuid}|${sessionKey}`);
         redisClient.incr(`students-${courseNumber}_count`);
 
         return res.sendStatus(200);
@@ -41,7 +45,25 @@ exports.connect = async (req, res) => {
 exports.getConnectedStudents = async (req, res) => {
     // const students = ["Student 1", "Student 2", "Student 3", "Student 4"];
     const numStudents = await redisClient.get(`students-${req.session.courseNumber}_count`);
-    const students = await redisClient.lrange(`students-${req.session.courseNumber}`, "0", numStudents);
-
+    let students = await redisClient.lrange(`students-${req.session.courseNumber}`, "0", numStudents);
+    students = await filter (students, async student => {
+        const sessionKey = student.split("|")[2];
+        const exists = await redisClient.exists(sessionKey);
+        if (exists) {
+            return true;
+        } else {
+            redisClient.lrem(`students-${req.session.courseNumber}`, 0, student);
+        }
+    });
+    students = students.map(student => {
+        const fields = student.split('|');
+        return `${fields[0]}:${fields[1]}`;
+    });
+    redisClient.set(`students-${req.session.courseNumber}_count`, students.length);
     res.send(JSON.stringify({students}))
+}
+
+async function filter(arr, callback) {
+    const fail = Symbol()
+    return (await Promise.all(arr.map(async item => (await callback(item)) ? item : fail))).filter(i=>i!==fail)
 }

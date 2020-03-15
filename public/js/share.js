@@ -1,6 +1,6 @@
 'use strict';
 
-const ws = new WebSocket("ws://localhost:9090");
+const ws = new WebSocket("wss://juniper.beer");
 
 ws.onopen = () => {
     console.log("WebSocket is open now.")

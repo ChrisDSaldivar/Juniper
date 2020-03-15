@@ -1,5 +1,5 @@
 document.querySelector('body').onload = main;
-console.log('yo')
+
 function main () {
     document.getElementById('firstName').focus();
     document.getElementById('connect-form').onsubmit = (event) => {
@@ -17,7 +17,7 @@ async function connect () {
         courseNumber: document.getElementById('courseNumber').value,
     }
     console.log(data)
-    const res = await fetch('http://localhost:9090/connect', {
+    const res = await fetch('https://juniper.beer/connect', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

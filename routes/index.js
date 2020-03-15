@@ -21,6 +21,7 @@ router.get('/student',
 );
 
 router.get('/screens', 
+    validateStudentConnection,
     catchErrors(studentController.updateScreenshot)
 );
 router.get('/students', 

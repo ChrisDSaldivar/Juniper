@@ -18,7 +18,7 @@ const sess = session({
         client: redisClient, // our redis client
         host: 'localhost',   // redis is running locally on our VM (we don't want anyone accessing it)
         port: 6379,          // 6379 is the default redis port (you don't have to set this unless you change port)
-        ttl: 30 * 60 * 60,   // Time-To-Live (in seconds) this will expire the session in 30 min
+        ttl: 6 * 60 * 60,   // Time-To-Live (in seconds) this will expire the session in 6 hours
     }),
     secret: process.env.SESSION_SECRET || "1234", // Use a random string for this in production
     resave: false,

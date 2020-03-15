@@ -1,8 +1,10 @@
 require('dotenv').config({ path: 'config.env' });
 const WebSocket = require('ws');
 const app       = require('./app');
+const uuidV4    = require('uuid').v4;
 
 const clients = [];
+const connections = {};
 
 app.set('port', process.env.PORT || 9090);
 
@@ -17,10 +19,20 @@ const wsServer = new WebSocket.Server({
 wsServer.on('connection', function connection (ws, request) {
     const firstName = request.session.firstName;
     ws.firstName = firstName;
+    ws.id = request.session.uuid;
     clients.push(ws);
+    connections[ws.id] = ws;
+    console.log(Object.keys(connections));
     ws.on('message', function incoming (message) {
-        console.log(`received: ${message} from: ${firstName}`);
-        ws.send(JSON.stringify({cmd: 'broadcast'}));
+        const msg = JSON.parse(message);
+        if (msg.cmd === 'candidate') {
+            candidate(ws, msg)
+        } else if (msg.cmd === 'offer') {
+            offer(ws, msg);
+        } else if (msg.cmd === 'answer') {
+            answer(ws, msg);
+        }
+        console.log(`\nreceived: ${JSON.stringify(msg, null, 2)} from: ${firstName}`);
     });
 });
 
@@ -45,3 +57,63 @@ server.on('upgrade', function(request, socket, head) {
         });
     });
 });
+
+
+// send the offer to the target with the sender's
+// id as their new target
+function offer (ws, msg) {
+    const res = {
+        cmd: 'offer',
+        target: ws.id,
+        description: msg.connection
+    };
+    console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
+    connections[msg.target].send(JSON.stringify(res));
+}
+
+function answer (ws, msg) {
+    const res = {
+        cmd: 'answer',
+        target: ws.id,
+        description: msg.localDescription
+    };
+    console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
+    connections[msg.target].send(JSON.stringify(res));
+}
+
+function candidate (ws, msg) {
+    const res = {
+        cmd: 'candidate',
+        target: ws.id,
+        candidate: msg.candidate
+    };
+    console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
+    connections[msg.target].send(JSON.stringify(res));
+}
+
+// io.sockets.on("connection", socket => {
+//     socket.on("broadcaster", () => {
+//       broadcaster = socket.id;
+//       socket.broadcast.emit("broadcaster");
+//     });
+//     socket.on("watcher", () => {
+//       socket.to(broadcaster).emit("watcher", socket.id);
+//     });
+//     socket.on("offer", (id, message) => {
+//       socket.to(id).emit("offer", socket.id, message);
+//     });
+//     socket.on("answer", (id, message) => {
+//       socket.to(id).emit("answer", socket.id, message);
+//     });
+//     socket.on("candidate", (id, message) => {
+//       socket.to(id).emit("candidate", socket.id, message);
+//     });
+//     socket.on("disconnect", () => {
+//       socket.to(broadcaster).emit("disconnectPeer", socket.id);
+//     });
+// });
+
+// function broadcaster (id, candidate) {
+//     broadcaster = id;
+//     socket.to(id).emit("candidate", socket.id, message);
+// }
