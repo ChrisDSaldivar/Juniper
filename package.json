@@ -31,6 +31,8 @@
   },
   "resolutions": {
     "pug/pug-code-gen/with/acorn": ">=5.7.4",
+    "pug/pug-code-gen/with/acorn-globals/acorn": ">=5.7.4",
+    "pug/pug-code-gen/pug-filters/pug-lexer/is-expression/acorn": ">=5.7.4",
     "sqlite3/node-pre-gyp/mkdirp/minimist": ">=1.2.2"
   }
 }
