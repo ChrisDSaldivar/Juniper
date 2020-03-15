@@ -4,6 +4,7 @@ ws.onopen = (event) => {
 };
 
 let audioConnection;
+let videoConnection;
 
 const proctorAudio  = document.getElementById("voice");
 let   myAudio;
@@ -60,7 +61,7 @@ async function receiveOffer (target, description) {
     studentAudio.getTracks().forEach( track => audioConnection.addTrack(track, studentAudio));
 
     // setup local description to send peer
-    const localDescription = audioConnection.createAnswer();
+    const localDescription = audioConnection.createAnswer({offerToReceiveAudio: true});
     await audioConnection.setLocalDescription(localDescription);
 
     const msg = {
