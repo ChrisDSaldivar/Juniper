@@ -26,7 +26,8 @@ async function connect () {
     })
     console.log(res);
     if (res.status === 200) {
-        window.location = '/student';
+        const data = await res.json();
+        window.location = data.route;
     } else {
         alert(`${res.status}: ${res.statusText}`);
     }

@@ -16,13 +16,13 @@ ws.onmessage = (event) => {
 document.querySelector('body').onload = initParams;
 document.querySelector('#shareScreen--button').onclick = initiateAudioStream;
 
-let studentId;
-
+let   studentId;
 const studentScreen = document.getElementById("screen");
 
-let audioConnection;
 const studentAudio  = document.getElementById("voice");
+let   audioConnection;
 let   proctorAudio;
+
 const audioConstraints = {
     audio: {
         echoCancellation: true,
@@ -52,11 +52,17 @@ async function initiateAudioStream () {
             ws.send(JSON.stringify(msg));
         }
     };
+
+    audioConnection.ontrack = (event) => {
+        console.log('PROCTOR DID RECEIVE AUDIO TRACK');
+        console.log(event.streams[0])
+        studentAudio.srcObject = event.streams[0];
+    }
     
     // create the offer
-    const offer = await audioConnection.createOffer();
+    const description = await audioConnection.createOffer({offerToReceiveAudio: true, offerToReceiveVideo: false});
     // set the local description of the p2p connection
-    await audioConnection.setLocalDescription(offer);
+    await audioConnection.setLocalDescription(description);
     // send the info to the server
     const msg = {
         cmd: "offer",
@@ -77,33 +83,34 @@ async function recieveRemoteCandidate (msg) {
 }
 
 
-function offer (id, description) {
-    peerConnection
-        .setRemoteDescription(description)
-        .then(() => peerConnection.createAnswer())
-        .then(sdp => peerConnection.setLocalDescription(sdp))
-        .then(() => {
-            const msg = {
-                cmd: "answer",
-                id,
-                localDescription: peerConnection.localDescription
-            }
-            ws.send(JSON.stringify(msg));
-        });
-    peerConnection.ontrack = event => {
-        video.srcObject = event.streams[0];
-    };
-    peerConnection.onicecandidate = event => {
-        if (event.candidate) {
-            const msg = {
-                cmd: "candidate",
-                id,
-                candidate: event.candidate
-            }
-            ws.send(JSON.stringify(msg));
-        }
-    };
-}
+// function offer (id, description) {
+//     peerConnection
+//         .setRemoteDescription(description)
+//         .then(() => peerConnection.createAnswer())
+//         .then(sdp => peerConnection.setLocalDescription(sdp))
+//         .then(() => {
+//             const msg = {
+//                 cmd: "answer",
+//                 id,
+//                 localDescription: peerConnection.localDescription
+//             }
+//             ws.send(JSON.stringify(msg));
+//         });
+//     peerConnection.ontrack = event => {
+
+//         video.srcObject = event.streams[0];
+//     };
+//     peerConnection.onicecandidate = event => {
+//         if (event.candidate) {
+//             const msg = {
+//                 cmd: "candidate",
+//                 id,
+//                 candidate: event.candidate
+//             }
+//             ws.send(JSON.stringify(msg));
+//         }
+//     };
+// }
 
 function initParams(){
     const urlParams = new URLSearchParams(window.location.search);

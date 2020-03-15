@@ -45,8 +45,16 @@ ws.onmessage = (event) => {
 
 async function receiveOffer (target, description) {
     audioConnection = new RTCPeerConnection(config);
-    await audioConnection.setRemoteDescription(description);
+    
+    // when the audio track opens; stream to audio element
+    audioConnection.ontrack = (event) => {
+        console.log('STUDENT DID RECEIVE AUDIO TRACK');
+        console.log(event.streams[0]);
+        proctorAudio.srcObject = event.streams[0];
+    };
 
+    await audioConnection.setRemoteDescription(description);
+    
     // get student audio stream and add to peer connection
     studentAudio = await navigator.mediaDevices.getUserMedia(audioConstraints);
     studentAudio.getTracks().forEach( track => audioConnection.addTrack(track, studentAudio));
@@ -62,11 +70,6 @@ async function receiveOffer (target, description) {
     };
 
     ws.send(JSON.stringify(msg));
-
-    // when the audio track opens; stream to audio element
-    audioConnection.ontrack = (event) => {
-        proctorAudio.srcObject = event.streams[0];
-    };
 
     // send connection candidates whenever they're available
     audioConnection.onicecandidate = (event) => {

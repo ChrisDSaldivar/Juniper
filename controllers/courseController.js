@@ -13,6 +13,10 @@ exports.getCourses = async (req, res) => {
     res.render('homepage', {title: 'Homepage'});
 };
 
+exports.getScreenViewer = async (req, res) => {
+    res.render('viewScreen', {title: 'View Student Screen'});
+};
+
 exports.connect = async (req, res) => {
     try {
         const result = await connectValidator.validate(req.body);
@@ -28,13 +32,19 @@ exports.connect = async (req, res) => {
         req.session.firstName = firstName;
         req.session.lastName = lastName;
         req.session.courseNumber = courseNumber;
-        req.session.student = true;
+        let route = '/student';
         req.session.uuid = uuidV4();
-        const sessionKey = `sess:${req.sessionID}`
-        redisClient.rpush(`students-${courseNumber}`, `${firstName} ${lastName}|${req.session.uuid}|${sessionKey}`);
-        redisClient.incr(`students-${courseNumber}_count`);
+        if (firstName === 'chris' && lastName === 'saldivar') {
+            req.session.instructor = true;
+            route = '/screens'
+        } else {
+            req.session.student = true;
+            const sessionKey = `sess:${req.sessionID}`
+            redisClient.rpush(`students-${courseNumber}`, `${firstName} ${lastName}|${req.session.uuid}|${sessionKey}`);
+            redisClient.incr(`students-${courseNumber}_count`);
+        }
 
-        return res.sendStatus(200);
+        return res.send(JSON.stringify({route}));
     }
     catch (err) {
         console.error(err);

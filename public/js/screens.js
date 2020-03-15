@@ -26,7 +26,7 @@ function renderStudents () {
         studentHeader.align = "center";
         const [ name, id ] = student.split(':');
         idMap[name] = id;
-        studentHeader.textContent = name;
+        studentHeader.textContent = name+' : '+id;
         studentHeader.id = name;
 
         let studentImg = document.createElement('img');
@@ -40,7 +40,7 @@ function renderStudents () {
         connectedStudent.onclick = function oneOnOne(event){
             const name = event.target.id;
             const id = idMap[name];
-            window.location = `https://juniper.beer/student?id=${id}&name=${name}`;
+            window.location = `https://juniper.beer/view?id=${id}&name=${name}`;
             
         }
         connectedStudent.appendChild(studentImg);

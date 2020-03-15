@@ -3,6 +3,28 @@ const WebSocket = require('ws');
 const app       = require('./app');
 const uuidV4    = require('uuid').v4;
 
+/************************************************
+* 
+*    THIS IS DUMB FIX IT!!!!!
+* 
+*************************************************/
+
+// Clears the redis datastore because I wrote dumb code
+// that isn't handling sessions properly
+// it saves the students that have logged in (they have valid sessions)
+// but it sends back the whole list of authenticated students 
+// when it should send back only authenticated students who have open
+// websocket connections. essentially I need the connections object
+// it works even when they reload or navigate away (because on connection it replace the ws in connections)
+// const redisClient = require('redis').createClient();
+// redisClient.flushall();
+
+/************************************************
+* 
+*    THAT WAS DUMB FIX IT!!!!!
+* 
+*************************************************/
+
 const clients = [];
 const connections = {};
 
@@ -65,7 +87,7 @@ function offer (ws, msg) {
     const res = {
         cmd: 'offer',
         target: ws.id,
-        description: msg.connection
+        description: msg.description
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));
@@ -75,7 +97,7 @@ function answer (ws, msg) {
     const res = {
         cmd: 'answer',
         target: ws.id,
-        description: msg.localDescription
+        description: msg.description
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));

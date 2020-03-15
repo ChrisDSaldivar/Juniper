@@ -24,6 +24,12 @@ router.get('/screens',
     validateStudentConnection,
     catchErrors(studentController.updateScreenshot)
 );
+
+router.get('/view', 
+    validateProctorConnection,
+    catchErrors(courseController.getScreenViewer)
+);
+
 router.get('/students', 
     catchErrors(courseController.getConnectedStudents)
 )
@@ -41,6 +47,14 @@ function checkRedirect (req, res, next) {
 
 function validateStudentConnection (req, res, next) {
     if (!req.session.connected && !req.session.student) {
+        return res.redirect('/');
+    } else {
+        next();
+    }
+}
+
+function validateProctorConnection (req, res, next) {
+    if (!req.session.connected && !req.session.assistant && !req.session.instructor) {
         return res.redirect('/');
     } else {
         next();
