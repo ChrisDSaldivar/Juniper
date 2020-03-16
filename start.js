@@ -87,7 +87,8 @@ function offer (ws, msg) {
     const res = {
         cmd: 'offer',
         target: ws.id,
-        description: msg.description
+        description: msg.description,
+        video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));
@@ -97,7 +98,8 @@ function answer (ws, msg) {
     const res = {
         cmd: 'answer',
         target: ws.id,
-        description: msg.description
+        description: msg.description,
+        video: msg.video,
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));
@@ -112,30 +114,3 @@ function candidate (ws, msg) {
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));
 }
-
-// io.sockets.on("connection", socket => {
-//     socket.on("broadcaster", () => {
-//       broadcaster = socket.id;
-//       socket.broadcast.emit("broadcaster");
-//     });
-//     socket.on("watcher", () => {
-//       socket.to(broadcaster).emit("watcher", socket.id);
-//     });
-//     socket.on("offer", (id, message) => {
-//       socket.to(id).emit("offer", socket.id, message);
-//     });
-//     socket.on("answer", (id, message) => {
-//       socket.to(id).emit("answer", socket.id, message);
-//     });
-//     socket.on("candidate", (id, message) => {
-//       socket.to(id).emit("candidate", socket.id, message);
-//     });
-//     socket.on("disconnect", () => {
-//       socket.to(broadcaster).emit("disconnectPeer", socket.id);
-//     });
-// });
-
-// function broadcaster (id, candidate) {
-//     broadcaster = id;
-//     socket.to(id).emit("candidate", socket.id, message);
-// }

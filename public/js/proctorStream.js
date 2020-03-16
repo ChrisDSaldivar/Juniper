@@ -9,6 +9,8 @@ ws.onmessage = (event) => {
     const cmd = msg.cmd;
     if (cmd === 'answer') {
         receiveAnswer(msg);
+    } else if (cmd === 'offer') {
+        receiveOffer(msg);
     }
 };
 
@@ -79,7 +81,11 @@ async function receiveAnswer (msg) {
 }
 
 async function recieveRemoteCandidate (msg) {
-    await audioConnection.addIceCandidate(msg.candidate);
+    if (msg.video) {
+        await videoConnection.addIceCandidate(msg.candidate);
+    } else {
+        await audioConnection.addIceCandidate(msg.candidate);
+    }
 }
 
 function initParams(){
@@ -88,4 +94,38 @@ function initParams(){
     // const name = urlParams.get('name');
     // let firstname = document.getElementById('firstname');
     // firstname.textContent = name;
+}
+
+async function receiveOffer (msg) {
+    videoConnection = new RTCPeerConnection(config);
+    videoConnection.ontrack = (event) => {
+        console.log('PROCTOR DID RECEIVE VIDEO TRACK');
+        console.log(event.streams[0]);
+        proctorAudio.srcObject = event.streams[0];
+    }
+
+    await videoConnection.setRemoteDescription(msg.description);
+
+    const localDescription = videoConnection.createAnswer({offerToReceiveVideo: true});
+    await videoConnection.setLocalDescription(localDescription);
+
+    const msg = {
+        cmd: 'answer',
+        target: msg.target,
+        description: videoConnection.localDescription,
+        video: true,
+    };
+    ws.send(JSON.stringify(msg));
+
+    videoConnection.onicecandidate = (event) =>{
+        if (event.candidate) {
+            const msg = {
+                cmd: 'candidate',
+                target: msg.target,
+                candidate: event.candidate,
+                video: true,
+            };
+            ws.send(JSON.stringify(msg));
+        }
+    };
 }

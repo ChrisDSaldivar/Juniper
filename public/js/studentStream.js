@@ -90,7 +90,11 @@ async function receiveOffer (target, description) {
 }
 
 async function recieveRemoteCandidate (msg) {
-    await audioConnection.addIceCandidate(msg.candidate);
+    if (msg.video) {
+        await videoConnection.addIceCandidate(msg.candidate);
+    } else {
+        await audioConnection.addIceCandidate(msg.candidate);
+    }
 }
 
 async function shareScreen (target) {
@@ -122,11 +126,12 @@ async function shareScreen (target) {
     const msg = {
         cmd: 'offer',
         target,
-        description: videoConnection.localDescription
+        description: videoConnection.localDescription,
+        video: true,
     };
     ws.send(JSON.stringify(msg));
 }
 
 async function receiveAnswer (msg) {
-    await audioConnection.setRemoteDescription(msg.description);
+    await videoConnection.setRemoteDescription(msg.description);
 }
