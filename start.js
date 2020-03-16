@@ -109,7 +109,8 @@ function candidate (ws, msg) {
     const res = {
         cmd: 'candidate',
         target: ws.id,
-        candidate: msg.candidate
+        candidate: msg.candidate,
+        video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
     connections[msg.target].send(JSON.stringify(res));

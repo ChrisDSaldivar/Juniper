@@ -1,8 +1,10 @@
 const ws = new WebSocket('wss://juniper.beer');
+let start;
+let close;
 ws.onopen = (event) => {
+    start = Date.now();
     console.log('Websocket is open');
 };
-
 ws.onmessage = (event) => {
     const msg = JSON.parse(event.data);
     console.log(JSON.stringify(msg, null, 2));
@@ -11,8 +13,18 @@ ws.onmessage = (event) => {
         receiveAnswer(msg);
     } else if (cmd === 'offer') {
         receiveOffer(msg);
+    } else if (cmd === 'candidate') {
+        recieveRemoteCandidate(msg);
     }
 };
+
+ws.onclose = (event) => {
+    close = Date.now();
+    console.log('WEBSOCKET HAS CLOSED');
+    console.log(event);
+    console.log(`socket lasted: ${(close-start)/1000} seconds`);
+}
+
 
 
 document.querySelector('body').onload = initParams;
@@ -82,6 +94,8 @@ async function receiveAnswer (msg) {
 
 async function recieveRemoteCandidate (msg) {
     if (msg.video) {
+        console.log('remote candidate');
+        console.log(msg.candidate)
         await videoConnection.addIceCandidate(msg.candidate);
     } else {
         await audioConnection.addIceCandidate(msg.candidate);
@@ -101,31 +115,36 @@ async function receiveOffer (msg) {
     videoConnection.ontrack = (event) => {
         console.log('PROCTOR DID RECEIVE VIDEO TRACK');
         console.log(event.streams[0]);
-        proctorAudio.srcObject = event.streams[0];
+        studentScreen.srcObject = event.streams[0];
     }
 
     await videoConnection.setRemoteDescription(msg.description);
 
+
+    myVideo = await navigator.mediaDevices.getDisplayMedia({video: true});
+
+    myVideo.getTracks().forEach(track => videoConnection.addTrack(track, myVideo));
+
     const localDescription = videoConnection.createAnswer({offerToReceiveVideo: true});
     await videoConnection.setLocalDescription(localDescription);
 
-    const msg = {
+    const res = {
         cmd: 'answer',
         target: msg.target,
         description: videoConnection.localDescription,
         video: true,
     };
-    ws.send(JSON.stringify(msg));
+    ws.send(JSON.stringify(res));
 
     videoConnection.onicecandidate = (event) =>{
         if (event.candidate) {
-            const msg = {
+            const res = {
                 cmd: 'candidate',
                 target: msg.target,
                 candidate: event.candidate,
                 video: true,
             };
-            ws.send(JSON.stringify(msg));
+            ws.send(JSON.stringify(res));
         }
     };
 }
