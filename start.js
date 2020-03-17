@@ -81,6 +81,10 @@ wsServer.on('connection', function connection (ws, request) {
     ws.on('close', () => {
         delete connections[ws.id];
     });
+
+    // Utility functions
+    ws.isOpen   = () => {return this.readyState === 1;};
+    ws.isClosed = () => { return this.readyState === 3;};
 });
 
 // send the offer to the target with the sender's
