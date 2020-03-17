@@ -32,7 +32,7 @@ router.get('/view',
 
 router.get('/students', 
     catchErrors(courseController.getConnectedStudents)
-)
+);
 
 function checkRedirect (req, res, next) {
     if (req.session.student) {

@@ -70,10 +70,10 @@ exports.getConnectedStudents = async (req, res) => {
         return `${fields[0]}:${fields[1]}`;
     });
     redisClient.set(`students-${req.session.courseNumber}_count`, students.length);
-    res.send(JSON.stringify({students}))
+    res.send(JSON.stringify({students}));
 }
 
 async function filter(arr, callback) {
-    const fail = Symbol()
-    return (await Promise.all(arr.map(async item => (await callback(item)) ? item : fail))).filter(i=>i!==fail)
+    const fail = Symbol(); 
+    return (await Promise.all(arr.map(async item => (await callback(item)) ? item : fail))).filter(i=>i!==fail);
 }

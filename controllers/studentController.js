@@ -6,9 +6,7 @@ exports.screenShare = async (req, res) => {
 };
 
 exports.updateScreenshot = async (req, res) => {
-    res.render('allScreens', {title: "Active Students",
-        students: ['as', 'asdfa','asdfa', 'asdfa','asdfa', 'asdfa','asdfa', 'asdfa','asdfa']}
-    );
+    res.render('allScreens', {title: "Active Students"});
 };
 
 exports.initiateScreenShare = async (req, res) => {

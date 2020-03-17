@@ -48,13 +48,17 @@ wsServer.on('connection', function connection (ws, request) {
     ws.on('message', function incoming (message) {
         const msg = JSON.parse(message);
         if (msg.cmd === 'candidate') {
-            candidate(ws, msg)
+            candidate(ws, msg);
         } else if (msg.cmd === 'offer') {
             offer(ws, msg);
         } else if (msg.cmd === 'answer') {
             answer(ws, msg);
         }
         console.log(`\nreceived: ${JSON.stringify(msg, null, 2)} from: ${firstName}`);
+    });
+
+    ws.on('close', () => {
+        delete connections[ws.id];
     });
 });
 
