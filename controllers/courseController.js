@@ -55,7 +55,7 @@ exports.connect = async (req, res) => {
         res.sendStatus(400);
     }
 };
-//test
+
 exports.getConnectedStudents = async (req, res) => {
     const studentIDs = connections.getStudentIDs(req.sessions.courseNumber);
     const students = await Promise.all(
