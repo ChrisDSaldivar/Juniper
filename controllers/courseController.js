@@ -1,11 +1,16 @@
 // const Course           = require('../models/courseModel');
 const {connectValidator} = require('../validators/CourseValidators');
+const connections        = require('./connectionsController');
 const redisClient        = require('redis').createClient();
 const {promisify}        = require('util');
 const uuidV4             = require('uuid').v4;
-redisClient.get = promisify(redisClient.get);
+
+// I should make a controller that wraps redis and exposes an
+// API for accessing the cache
+redisClient.get    = promisify(redisClient.get);
 redisClient.lrange = promisify(redisClient.lrange);
 redisClient.exists = promisify(redisClient.exists);
+redisClient.hget   = promisify(redisClient.hget);
 
 const validCourses = ['CS1114', 'CS2124', 'CS3613'];
 
@@ -39,9 +44,8 @@ exports.connect = async (req, res) => {
             route = '/screens'
         } else {
             req.session.student = true;
-            const sessionKey = `sess:${req.sessionID}`
-            redisClient.rpush(`students-${courseNumber}`, `${firstName} ${lastName}|${req.session.uuid}|${sessionKey}`);
-            redisClient.incr(`students-${courseNumber}_count`);
+            redisClient.hset(req.session.uuid, 'firstName', firstName);
+            redisClient.hset(req.session.uuid, 'lastName', lastName);
         }
 
         return res.send(JSON.stringify({route}));
@@ -53,27 +57,13 @@ exports.connect = async (req, res) => {
 };
 
 exports.getConnectedStudents = async (req, res) => {
-    // const students = ["Student 1", "Student 2", "Student 3", "Student 4"];
-    const numStudents = await redisClient.get(`students-${req.session.courseNumber}_count`);
-    let students = await redisClient.lrange(`students-${req.session.courseNumber}`, "0", numStudents);
-    students = await filter (students, async student => {
-        const sessionKey = student.split("|")[2];
-        const exists = await redisClient.exists(sessionKey);
-        if (exists) {
-            return true;
-        } else {
-            redisClient.lrem(`students-${req.session.courseNumber}`, 0, student);
-        }
-    });
-    students = students.map(student => {
-        const fields = student.split('|');
-        return `${fields[0]}:${fields[1]}`;
-    });
-    redisClient.set(`students-${req.session.courseNumber}_count`, students.length);
+    const studentIDs = connections.getStudentIDs(req.sessions.courseNumber);
+    const students = await Promise.all(
+        studentIDs.map( async (id) => {
+            const firstName = await redisClient.hget(id, 'firstName');
+            const lastName  = await redisClient.hget(id, 'lastName');
+            return `${firstName} ${lastName}:${id}`;
+        })
+    );
     res.send(JSON.stringify({students}));
-}
-
-async function filter(arr, callback) {
-    const fail = Symbol(); 
-    return (await Promise.all(arr.map(async item => (await callback(item)) ? item : fail))).filter(i=>i!==fail);
 }

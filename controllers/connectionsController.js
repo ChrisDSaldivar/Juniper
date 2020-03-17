@@ -79,6 +79,14 @@ class ConnectionController {
         delete this.info[id];
         delete this.connections[courseNumber][role][id];
     }
+
+    getStudentIDs (courseNumber) {
+        let studentIDs = [];
+        if (this.connections[courseNumber]) {
+            studentIDs = Object.keys(this.connections[courseNumber].student);
+        }
+        return studentIDs;
+    }
 }
 
-exports.ConnectionController = ConnectionController;
+exports.ConnectionController = new ConnectionController();
