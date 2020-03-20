@@ -26,6 +26,7 @@ const sess = session({
         httpOnly: true,
     },
     saveUninitialized: false, // set this to false so we can control when the cookie is set (i.e. when the user succesfully logs in)
+    name: 'id', // our cookie's name; make it generic to prevent fingerprinting
 });
 
 app.use(sess);
