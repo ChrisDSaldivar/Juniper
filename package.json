@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "nodemon ./start.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,8 @@
     "uuid": "^7.0.2",
     "winston": "^3.2.1",
     "ws": "^7.2.3"
+  },
+  "resolutions": {
+    "minimist": "^1.2.5"
   }
 }
