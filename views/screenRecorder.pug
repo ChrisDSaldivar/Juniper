@@ -4,15 +4,19 @@ html
     title= `${title} | ${h.siteName}`
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/screenShare.css')
+    link(rel='stylesheet', href='/css/screenRecorder.css')
     meta(name="viewport" content="width=device-width, initial-scale=1")
+    script(src="https://kit.fontawesome.com/c7e45398bd.js" crossorigin="anonymous")
     link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
   body
     .container
         h2#firstname
         .stream-container
-          video#screen(autoplay)
-          audio#voice(autoplay)
+          video#playback(autoplay)
         .controls
-          button#shareScreen--button Share Screen
-          button#stopCapture--button Stop Capture
-    script(src="/js/studentStream.js")
+          button#startRecording Start Recording
+          button#stopRecording Stop Recording
+          a#download.disabled(download="screenRecording.webm") 
+            i.far.fa-save
+            section Save
+    script(src="/js/screenRecorder.js")

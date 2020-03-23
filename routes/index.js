@@ -34,6 +34,10 @@ router.get('/students',
     catchErrors(courseController.getConnectedStudents)
 );
 
+router.get('/record',
+    (req, res) => {res.render('screenRecorder.pug')}
+)
+
 function checkRedirect (req, res, next) {
     if (req.session.student) {
         return res.redirect('/student');

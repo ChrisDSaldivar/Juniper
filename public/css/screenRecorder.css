@@ -1,0 +1,40 @@
+.controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 10px;
+}
+
+a, button {
+    background-color: #375bb6;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    border: none;
+    color: whitesmoke;
+    font-size: 1.5em;
+    outline: none;
+    font-family: inherit;
+    height: 1.75em;
+}
+
+button:active {
+    background-color: #243b75;
+}
+
+a:not(.disabled):active {
+    background-color: #243b75;
+}
+
+a {
+    text-decoration: none;
+    position: relative;
+}
+
+.disabled {
+    background-color: #7e7e7e;
+}
+
+i {
+    position: absolute;
+    left: 10px;
+}

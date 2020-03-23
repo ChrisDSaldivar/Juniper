@@ -19,7 +19,6 @@ h1 {
     display: grid;
     place-items: center;
     background-color: whitesmoke;
-    font-family: Helvetica, sans-serif;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
     border: 5px solid rgb(61, 61, 61);

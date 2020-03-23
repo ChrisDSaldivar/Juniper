@@ -16,7 +16,6 @@ h1 {
     display: grid;
     place-items: center;
     background-color: whitesmoke;
-    font-family: Helvetica, sans-serif;
     grid-template-rows: 1fr 3fr;
 }
 
@@ -39,7 +38,7 @@ input[type='text'] {
     padding-bottom: 5px;
     border: none;
     outline: none;
-    border-bottom: solid rgb(27, 197, 112) 1px;
+    border-bottom: solid #375bb6 1px;
 }
 
 button {
@@ -49,11 +48,11 @@ button {
     font-size: 1.25em;
     padding: 10px;
     border-radius: 10px;
-    background-color: rgb(27, 197, 112);
+    background-color: #375bb6;
 }
 
 input[type='button']:active {
-    background-color: rgb(21, 146, 84);
+    background-color: #243b75;
 }
 
 @media only screen and (max-width: 940px) {
