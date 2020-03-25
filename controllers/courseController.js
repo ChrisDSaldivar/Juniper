@@ -57,7 +57,7 @@ exports.connect = async (req, res) => {
 };
 
 exports.getConnectedStudents = async (req, res) => {
-    const studentIDs = connections.getStudentIDs(req.sessions.courseNumber);
+    const studentIDs = connections.getStudentIDs(req.session.courseNumber);
     const students = await Promise.all(
         studentIDs.map( async (id) => {
             const firstName = await redisClient.hget(id, 'firstName');

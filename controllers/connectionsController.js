@@ -89,4 +89,4 @@ class ConnectionController {
     }
 }
 
-exports.ConnectionController = new ConnectionController();
+module.exports = new ConnectionController();
