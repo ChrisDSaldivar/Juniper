@@ -12,9 +12,6 @@
     "preinstall": "npx npm-force-resolutions",
     "nuke": "rm ./Database/Juniper.db"
   },
-  "events": {
-    "restart": "echo hi"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ChrisDSaldivar/Juniper.git"
