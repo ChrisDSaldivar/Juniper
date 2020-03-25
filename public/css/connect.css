@@ -39,6 +39,11 @@ input[type='text'] {
     border: none;
     outline: none;
     border-bottom: solid #375bb6 1px;
+    font-family: inherit;
+}
+
+select {
+    font-size: 0.75em;
 }
 
 button {
@@ -49,6 +54,8 @@ button {
     padding: 10px;
     border-radius: 10px;
     background-color: #375bb6;
+    color: white;
+    font-family: inherit;
 }
 
 input[type='button']:active {
