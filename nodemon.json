@@ -1,5 +1,5 @@
 {
     "events": {
-        "start": "sqlite3 ./Database/Juniper.db < ./Models/schema.sql"
+        "start": "node ./scripts/initDB.js"
     }
 }

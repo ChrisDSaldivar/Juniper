@@ -6,7 +6,7 @@
     "start": "node ./start.js",
     "start-dev": "npm run init-db & npm run start-nodemon",
     "start-nodemon": "nodemon ./start.js",
-    "init-db": "sqlite3 ./Database/Juniper.db < ./Models/schema.sql",
+    "init-db": "node ./scripts/initDB.js",
     "restart": "echo restarted",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npx npm-force-resolutions",
