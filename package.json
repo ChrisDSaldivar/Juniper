@@ -9,7 +9,8 @@
     "init-db": "sqlite3 ./Database/Juniper.db < ./Models/schema.sql",
     "restart": "echo restarted",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "nuke": "rm ./Database/Juniper.db"
   },
   "events": {
     "restart": "echo hi"
