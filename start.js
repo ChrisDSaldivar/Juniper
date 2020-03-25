@@ -2,6 +2,7 @@ require('dotenv').config({ path: 'config.env' });
 const WebSocket = require('ws');
 const app       = require('./app');
 const uuidV4    = require('uuid').v4;
+const connections = require('./controllers/connectionsController');
 
 /************************************************
 * 
@@ -26,7 +27,6 @@ const uuidV4    = require('uuid').v4;
 *************************************************/
 
 const clients = [];
-const connections = {};
 
 app.set('port', process.env.PORT || 9090);
 
@@ -63,9 +63,10 @@ wsServer.on('connection', function connection (ws, request) {
     const firstName = request.session.firstName;
     ws.firstName = firstName;
     ws.id = request.session.uuid;
+    ws.courseNumber = request.session.courseNumber;
+    ws.role = request.session.role; // this doesn't exist yet
     clients.push(ws);
-    connections[ws.id] = ws;
-    console.log(Object.keys(connections));
+    connections.addConnection(ws);
     ws.on('message', function incoming (message) {
         const msg = JSON.parse(message);
         if (msg.cmd === 'candidate') {
@@ -79,7 +80,7 @@ wsServer.on('connection', function connection (ws, request) {
     });
 
     ws.on('close', () => {
-        delete connections[ws.id];
+        delete connections.remove(ws);
     });
 
     // Utility functions
@@ -97,7 +98,7 @@ function offer (ws, msg) {
         video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections[msg.target].send(JSON.stringify(res));
+    connections.send(JSON.stringify(res), msg.target);
 }
 
 function answer (ws, msg) {
@@ -108,7 +109,7 @@ function answer (ws, msg) {
         video: msg.video,
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections[msg.target].send(JSON.stringify(res));
+    connections.send(JSON.stringify(res), msg.target);
 }
 
 function candidate (ws, msg) {
@@ -119,5 +120,5 @@ function candidate (ws, msg) {
         video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections[msg.target].send(JSON.stringify(res));
+    connections.send(JSON.stringify(res), msg.target);
 }

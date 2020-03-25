@@ -29,8 +29,12 @@ class ConnectionController {
     addConnection (ws) {
         // extract session data from ws
         const {courseNumber, role, id} = ws;
+        console.log(courseNumber)
+        console.log(role)
+        console.log(id)
         
         if (this.connections[courseNumber] === undefined) { // if the course doesn't exist yet
+            console.log("add the course")
             this.addCourse(courseNumber);                   // then create it
         }
         // setup our lookup table
@@ -48,8 +52,8 @@ class ConnectionController {
     // I really wish JS had a defaultdict like python
     addCourse (courseNumber) {
         this.connections[courseNumber] = {
-            proctors: {},
-            students: {}
+            proctor: {},
+            student: {}
         };
     }
 

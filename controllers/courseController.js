@@ -37,11 +37,13 @@ exports.connect = async (req, res) => {
         req.session.firstName = firstName;
         req.session.lastName = lastName;
         req.session.courseNumber = courseNumber;
+        req.session.role = 'student';
         let route = '/student';
         req.session.uuid = uuidV4();
         if (firstName === 'chris' && lastName === 'saldivar' || firstName === 'joseph' && lastName === 'branch' ) {
             req.session.instructor = true;
             route = '/screens'
+            req.session.role = 'proctor';
         } else {
             req.session.student = true;
             redisClient.hset(req.session.uuid, 'firstName', firstName);
@@ -57,6 +59,7 @@ exports.connect = async (req, res) => {
 };
 
 exports.getConnectedStudents = async (req, res) => {
+    console.log(connections);
     const studentIDs = connections.getStudentIDs(req.session.courseNumber);
     const students = await Promise.all(
         studentIDs.map( async (id) => {
