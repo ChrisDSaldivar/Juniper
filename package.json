@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "nodemon ./start.js",
+    "start": "node ./start.js",
+    "start-dev": "npm run init-db & npm run start-nodemon",
+    "start-nodemon": "nodemon ./start.js",
+    "init-db": "sqlite3 ./Database/Juniper.db < ./Models/schema.sql",
+    "restart": "echo restarted",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npx npm-force-resolutions"
+  },
+  "events": {
+    "restart": "echo hi"
   },
   "repository": {
     "type": "git",
@@ -19,6 +26,7 @@
   "homepage": "https://github.com/ChrisDSaldivar/Juniper#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "argon2": "^0.26.1",
     "connect-redis": "^4.0.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

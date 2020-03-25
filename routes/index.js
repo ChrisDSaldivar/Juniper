@@ -38,6 +38,17 @@ router.get('/record',
     (req, res) => {res.render('screenRecorder.pug')}
 )
 
+// User accounts
+router.post('/register', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
+});
+
+router.post('/login', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
+});
+
 function checkRedirect (req, res, next) {
     if (req.session.student) {
         return res.redirect('/student');
