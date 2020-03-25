@@ -21,7 +21,7 @@ router.get('/student',
 );
 
 router.get('/screens', 
-    validateStudentConnection,
+    validateProctorConnection,
     catchErrors(studentController.updateScreenshot)
 );
 
@@ -31,6 +31,7 @@ router.get('/view',
 );
 
 router.get('/students', 
+    validateProctorConnection,
     catchErrors(courseController.getConnectedStudents)
 );
 
@@ -61,7 +62,8 @@ function checkRedirect (req, res, next) {
 }
 
 function validateStudentConnection (req, res, next) {
-    if (!req.session.connected && !req.session.student) {
+    console.log('validating student')
+    if (!req.session.authenticated || !req.session.student) {
         return res.redirect('/');
     } else {
         next();
@@ -69,7 +71,7 @@ function validateStudentConnection (req, res, next) {
 }
 
 function validateProctorConnection (req, res, next) {
-    if (!req.session.connected && !req.session.assistant && !req.session.instructor) {
+    if (!(req.session.authenticated && (req.session.assistant || req.session.instructor))) {
         return res.redirect('/');
     } else {
         next();
@@ -77,7 +79,7 @@ function validateProctorConnection (req, res, next) {
 }
 
 function validateAssistantConnection (req, res, next) {
-    if (!req.session.connected && !req.session.assistant) {
+    if (!req.session.authenticated || !req.session.assistant) {
         return res.redirect('/');
     } else {
         next();
@@ -85,7 +87,7 @@ function validateAssistantConnection (req, res, next) {
 }
 
 function validateInstructorConnection (req, res, next) {
-    if (!req.session.connected && !req.session.instructor) {
+    if (!req.session.authenticated || !req.session.instructor) {
         return res.redirect('/');
     } else {
         next();

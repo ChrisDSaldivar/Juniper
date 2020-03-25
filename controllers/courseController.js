@@ -33,7 +33,7 @@ exports.connect = async (req, res) => {
         if (!validCourses.includes(courseNumber)) {
             return res.sendStatus(400);
         }
-        req.session.connected = true;
+        req.session.authenticated = true;
         req.session.firstName = firstName;
         req.session.lastName = lastName;
         req.session.courseNumber = courseNumber;
