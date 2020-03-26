@@ -1,14 +1,4 @@
 -- Add table schemas here
-DROP TABLE IF EXISTS "Users";
-DROP TABLE IF EXISTS "Instructors";
-DROP TABLE IF EXISTS "Proctors";
-DROP TABLE IF EXISTS "Roster";
-DROP TABLE IF EXISTS "Courses";
-DROP TABLE IF EXISTS "Office Hour";
-DROP TABLE IF EXISTS "Office Hour Schedule";
-DROP TABLE IF EXISTS "Instructor Codes";
-DROP TABLE IF EXISTS "Proctor Codes";
-
 CREATE TABLE IF NOT EXISTS "Users"(
 	"first_name"	INTEGER NOT NULL,
 	"last_name"	INTEGER NOT NULL,
