@@ -73,7 +73,7 @@ class ConnectionController {
             socket.send(JSON.stringify(msg));
         } else if (socket.isClosed()) { // socket can be in 4 states so: !isOpen() !== isClosed() since it can be in the connecting or closing states
             delete this.info[target];
-            delete this.connections[courseNumber][role][targer];
+            delete this.connections[courseNumber][role][target];
         }
     }
 
