@@ -14,12 +14,12 @@ class ConnectionController {
         /* 
             We use this object to simplify the API.
             it uses the client's ID as a key and
-            the value is the info associate with that id
+            the value is the info associated with that id
             id: {
                 courseNumber,
                 role,
             }
-            Essentially it makes it easy to look up the coursenumber and role
+            Essentially it makes it easy to look up the course number and role
             of a target when we want to send a message. This way our client only 
             needs to send us the target's id.
         */
@@ -34,9 +34,9 @@ class ConnectionController {
         console.log(id)
         
         if (this.connections[courseNumber] === undefined) { // if the course doesn't exist yet
-            console.log("add the course")
             this.addCourse(courseNumber);                   // then create it
         }
+
         // setup our lookup table
         this.info[id] = {
             courseNumber: courseNumber,
@@ -72,8 +72,7 @@ class ConnectionController {
         if (socket.isOpen()) {
             socket.send(JSON.stringify(msg));
         } else if (socket.isClosed()) { // socket can be in 4 states so: !isOpen() !== isClosed() since it can be in the connecting or closing states
-            delete this.info[target];
-            delete this.connections[courseNumber][role][target];
+            this.remove(socket);
         }
     }
 

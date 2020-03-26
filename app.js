@@ -13,6 +13,7 @@ app.set('views', path.join(__dirname, 'views')); // this is the folder where we 
 app.set('view engine', 'pug');
 
 const redisClient = redis.createClient()
+
 const sess = session({
     store: new RedisStore({ 
         client: redisClient, // our redis client

@@ -4,30 +4,6 @@ const app       = require('./app');
 const uuidV4    = require('uuid').v4;
 const connections = require('./controllers/connectionsController');
 
-/************************************************
-* 
-*    THIS IS DUMB FIX IT!!!!!
-* 
-*************************************************/
-
-// Clears the redis datastore because I wrote dumb code
-// that isn't handling sessions properly
-// it saves the students that have logged in (they have valid sessions)
-// but it sends back the whole list of authenticated students 
-// when it should send back only authenticated students who have open
-// websocket connections. essentially I need the connections object
-// it works even when they reload or navigate away (because on connection it replace the ws in connections)
-// const redisClient = require('redis').createClient();
-// redisClient.flushall();
-
-/************************************************
-* 
-*    THAT WAS DUMB FIX IT!!!!!
-* 
-*************************************************/
-
-const clients = [];
-
 app.set('port', process.env.PORT || 9090);
 
 const server = app.listen(app.get('port'), () => {
@@ -36,7 +12,7 @@ const server = app.listen(app.get('port'), () => {
 
 const wsServer = new WebSocket.Server({
     noServer: true,
-})
+});
 
 /* 
  Handle the HTTP upgrade ourselves so we can capture the request object's session property
@@ -45,14 +21,8 @@ const wsServer = new WebSocket.Server({
  updates to the session unless the user reloads
 */
 server.on('upgrade', function(request, socket, head) {
+    console.log(request.headers)
     app.get('sessionParser')(request, {}, () => {
-        if (!request.session.student && !request.session.instructor && !request.session.assistant) {
-            socket.destroy();
-            return;
-        }
-  
-        console.log('Session is parsed!');
-  
         wsServer.handleUpgrade(request, socket, head, function(ws) {
             wsServer.emit('connection', ws, request);
         });
@@ -60,12 +30,17 @@ server.on('upgrade', function(request, socket, head) {
 });
 
 wsServer.on('connection', function connection (ws, request) {
+    if (!request.session.student && !request.session.instructor && !request.session.proctor) {
+        ws.close();
+        return;
+    }
+
     const firstName = request.session.firstName;
     ws.firstName = firstName;
     ws.id = request.session.uuid;
     ws.courseNumber = request.session.courseNumber;
     ws.role = request.session.role; // this doesn't exist yet
-    clients.push(ws);
+
     connections.addConnection(ws);
     ws.on('message', function incoming (message) {
         const msg = JSON.parse(message);
@@ -79,9 +54,7 @@ wsServer.on('connection', function connection (ws, request) {
         console.log(`\nreceived: ${JSON.stringify(msg, null, 2)} from: ${firstName}`);
     });
 
-    ws.on('close', () => {
-        delete connections.remove(ws);
-    });
+    ws.on('close', () => {connections.remove(ws);});
 
     // Utility functions
     ws.isOpen   = () => {return this.readyState === 1;};
