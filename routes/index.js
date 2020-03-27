@@ -13,10 +13,6 @@ router.get('/',
     checkRedirect,
     catchErrors(courseController.getCourses)
 );
-router.post('/connect', 
-    catchErrors(courseController.connect)
-);
-
 router.get('/student',
     catchErrors(studentController.screenShare)
 );

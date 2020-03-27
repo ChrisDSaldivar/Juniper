@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
         return res.sendStatus(400);
     }
 
-    const {user_uuid, passwordHash, firstName, lastName, isStudent, isProctor, isInstructor} = result;
+    const {userUUID, passwordHash, firstName, lastName, isStudent, isProctor, isInstructor} = result;
     
     if (await verifyPassword(passwordHash, password)) {
         req.session.firstName = firstName;
@@ -42,11 +42,13 @@ exports.login = async (req, res) => {
         req.session.isStudent = isStudent;
         req.session.isProctor = isProctor;
         req.session.isInstructor = isInstructor;
-        req.session.user_uuid = user_uuid;
+        req.session.uuid = userUUID;
         req.session.authenticated = true;
         req.session.instructor = isInstructor;
         req.session.student = isStudent;
         req.session.proctor = isProctor;
+        req.session.role = isInstructor || isProctor ? 'proctor' : 'student';
+        // connections.
         const route = isInstructor ? '/instructor' : '/student';
         res.redirect(route);
     } else {
