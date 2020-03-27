@@ -1,5 +1,7 @@
+const dao = require('./dao');
+
 class StudentModel {
-    constructor (dao) {
+    constructor () {
         this.dao = dao;
     }
 
@@ -13,7 +15,13 @@ class StudentModel {
         await this.dao.run(sql, [studentUUID, courseUUID]);
     }
 
-   
+    async getCourses (studentUUID) {
+        const sql = `
+        SELECT courseUUID FROM Roster WHERE studentUUID=?
+        `;
+
+        return await this.dao.all(sql, [studentUUID]);
+    }
 }
 
 module.exports = StudentModel;

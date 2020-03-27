@@ -1,0 +1,59 @@
+.container {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+.card {
+    height: 50%;
+    width: 40%;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background-color: whitesmoke;
+    grid-template-rows: 1fr 3fr;
+}
+
+.createCourse-form {
+    display: grid;
+    place-items: center;
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: 50px;
+}
+
+
+input[type='text'] {
+    background-color: inherit;
+    font-size: 1em;
+    padding-bottom: 5px;
+    border: none;
+    outline: none;
+    border-bottom: solid #375bb6 1px;
+    font-family: inherit;
+}
+button {
+    outline: none;
+    border: none;
+    background-color: inherit;
+    font-size: 1.25em;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #375bb6;
+    color: white;
+    font-family: inherit;
+}
+
+input[type='button']:active {
+    background-color: #243b75;
+}
+
+@media only screen and (max-width: 940px) {
+    input[type='text'] { 
+       font-size: .75em; 
+    }
+}

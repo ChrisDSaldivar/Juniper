@@ -36,6 +36,17 @@ router.get('/record',
     (req, res) => {res.render('screenRecorder.pug')}
 )
 
+// Courses
+router.get('/createCourse',
+    validateInstructorConnection,
+    courseController.getCreateCourseForm
+);
+
+router.put('/createCourse',
+    validateInstructorConnection,
+    catchErrors(courseController.createCourse)
+);
+
 // User accounts
 router.post('/register',
     catchErrors(authController.register),

@@ -1,8 +1,8 @@
-// const Course           = require('../models/courseModel');
-const connections        = require('./connectionsController');
-const redisClient        = require('redis').createClient();
-const {promisify}        = require('util');
-const uuidV4             = require('uuid').v4;
+const CourseModel = new (require('../models/courseModel'));
+const connections = require('./connectionsController');
+const redisClient = require('redis').createClient();
+const {promisify} = require('util');
+const cc  = require('coupon-code');
 
 // I should make a controller that wraps redis and exposes an
 // API for accessing the cache
@@ -30,4 +30,16 @@ exports.getConnectedStudents = async (req, res) => {
         })
     );
     res.send(JSON.stringify({students}));
+}
+
+exports.createCourse = async (req, res) => {
+    const {prefix, courseNum, sectionNum} = req.body;
+    const courseCode = cc.generate({ parts : 4 });
+    const instructorUUID = req.session.uuid;
+    await CourseModel.addCourse(prefix, courseNum, sectionNum, courseCode, instructorUUID);
+    res.json({courseCode});
+}
+
+exports.getCreateCourseForm = (req, res) => {
+    res.render('createCourse');
 }

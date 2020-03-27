@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title= `${title} | ${h.siteName}`
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/createCourse.css')
+    link(rel='stylesheet', href='/css/flash.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
+  body
+    div.container
+        section.card
+            h1 Create a Course
+            form#createCourse-form.createCourse-form
+                input#prefix(type="text", name="prefix" placeholder="Prefix")
+                input#courseNum(type="text", name="courseNum" placeholder="Course Number")
+                input#sectionNum(type="text", name="sectionNum" placeholder="Section Number")
+                button#submit Submit
+    script(src="/js/createCourse.js")

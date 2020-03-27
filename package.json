@@ -10,7 +10,7 @@
     "restart": "echo restarted",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npx npm-force-resolutions",
-    "nuke": "rm ./Database/Juniper.db"
+    "nuke": "redis-cli flushall && rm ./Database/Juniper.db"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,5 @@
 const argon2    = require('argon2');
-const dao       = require('../models/dao');
-const UserModel = new (require('../models/UserModel'))(dao); // Funky syntax but it makes life easier. parens around require force precedence
+const UserModel = new (require('../models/UserModel')); // Funky syntax but it makes life easier. parens around require force precedence
 const crypto    = require('crypto');
 
 

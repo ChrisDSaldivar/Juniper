@@ -32,13 +32,14 @@ CREATE TABLE IF NOT EXISTS Courses (
 	prefix    TEXT NOT NULL,
 	courseNum	TEXT NOT NULL,
 	sectionNum	INTEGER NOT NULL,
-	course_code	TEXT NOT NULL,
+	courseCode	TEXT NOT NULL,
 	instructorUUID	TEXT NOT NULL,
-	PRIMARY KEY(courseUUID)
+	PRIMARY KEY(courseUUID),
+	UNIQUE (prefix, courseNum, sectionNum)
 );
 
 CREATE TABLE IF NOT EXISTS Office_Hours (
-    office_hoursUUID	TEXT NOT NULL,
+    officeHoursUUID	TEXT NOT NULL,
 	instructorUUID	TEXT NOT NULL,
 	startTime	TEXT NOT NULL,
 	endTime	TEXT NOT NULL,
@@ -47,13 +48,13 @@ CREATE TABLE IF NOT EXISTS Office_Hours (
 	wednesday	BOOLEAN NOT NULL DEFAULT FALSE,
 	thursday	BOOLEAN NOT NULL DEFAULT FALSE,
 	friday	BOOLEAN NOT NULL DEFAULT FALSE,
-	PRIMARY KEY(office_hoursUUID)
+	PRIMARY KEY(officeHoursUUID)
 );
 
 CREATE TABLE IF NOT EXISTS Office_Hour_Appointments (
-	office_hoursUUID	TEXT NOT NULL,
+	officeHoursUUID	TEXT NOT NULL,
 	studentUUID	TEXT NOT NULL,
-	PRIMARY KEY(office_hoursUUID)
+	PRIMARY KEY(officeHoursUUID)
 );
 
 CREATE TABLE IF NOT EXISTS Instructor_Codes (

@@ -1,7 +1,8 @@
 const uuidV4 = require('uuid').v4;
+const dao = require('./dao');
 
 class UserModel {
-    constructor (dao) {
+    constructor () {
         this.dao = dao;
     }
 
