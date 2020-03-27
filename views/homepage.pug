@@ -4,6 +4,7 @@ html
     title= `${title} | ${h.siteName}`
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/connect.css')
+    link(rel='stylesheet', href='/css/flash.css')
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
   body
@@ -19,4 +20,14 @@ html
                   option(value="CS2124") CS2124
                   option(value="CS3613") CS3613
                 button#submit Submit
+    .flashes
+      .flash(class='flash--info')
+        p.flash__text This is an info flash message.
+        button.flash__remove(onClick="this.parentElement.remove()") &times;
+      .flash(class='flash--success')
+        p.flash__text This is a success flash message.
+        button.flash__remove(onClick="this.parentElement.remove()") &times;
+      .flash(class='flash--error')
+        p.flash__text This is an error flash message.
+        button.flash__remove(onClick="this.parentElement.remove()") &times;
     script(src="/js/connect.js")

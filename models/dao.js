@@ -1,26 +1,25 @@
 const sqlite3 = require('sqlite3');
 const util    = require('util');
+const { join } = require('path');
+
+const dirPath = join(__basedir, 'Database', process.env.dbFilePath || 'Juniper.db');
 
 function createDB (dbFilePath) {
-    return new Promise ( (resolve, reject) => {
-        const db = new sqlite3.Database(dbFilePath, (err) => {
-            if (err) {
-                console.error(`Could not open ${dbFilePath}`);
-                reject(err);
-            }
-        })
-        resolve(db);
+    return new sqlite3.Database(dbFilePath, (err) => {
+        if (err) {
+            console.error(`Could not open ${dbFilePath}`);
+            throw err;
+        }
     });
 }
 
 
-async function createDAO (dbFilePath) {
-    const db  = await createDB(dbFilePath);
+function createDAO (dbFilePath) {
+    const db  = createDB(dbFilePath);
     db.run    = util.promisify(db.run);
-    db.all    = util.promisify(db.all);
     db.get    = util.promisify(db.get);
-    db.delete = util.promisify(db.delete);
+    db.all    = util.promisify(db.all);
     return db;
 }
 
-module.exports = createDAO;
+module.exports = createDAO(dirPath);

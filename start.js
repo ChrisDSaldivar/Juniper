@@ -1,4 +1,6 @@
 require('dotenv').config({ path: 'config.env' });
+global.__basedir = __dirname;
+
 const WebSocket = require('ws');
 const app       = require('./app');
 const uuidV4    = require('uuid').v4;

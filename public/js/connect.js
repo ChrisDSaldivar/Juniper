@@ -19,15 +19,15 @@ async function connect () {
     console.log(data)
     const res = await fetch('https://juniper.beer/connect', {
         method: 'POST',
+        redirect: 'follow',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data),
     })
     console.log(res);
-    if (res.status === 200) {
-        const data = await res.json();
-        window.location = data.route;
+    if (res.redirected) {
+        window.location.href = res.url;
     } else {
         alert(`${res.status}: ${res.statusText}`);
     }
