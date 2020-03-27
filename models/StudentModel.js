@@ -5,8 +5,16 @@ class StudentModel {
         this.dao = dao;
     }
 
-    async addCourse (studentUUID, courseUUID) {
-        const sql = `
+    async addCourse (studentUUID, courseCode) {
+        let sql = `
+        SELECT courseUUID
+        FROM Courses 
+        WHERE courseCode=?
+        `
+        const data = this.dao.get(sql, [courseCode]);
+        const {courseUUID} = data;
+
+        sql = `
         INSERT INTO 
         Roster (studentUUID, courseUUID)
         VALUES (?, ?)
@@ -17,7 +25,7 @@ class StudentModel {
 
     async getCourses (studentUUID) {
         const sql = `
-        SELECT courseUUID FROM Roster WHERE studentUUID=?
+        SELECT courseUUID, prefix, courseNum, sectionNum FROM Roster WHERE studentUUID=?
         `;
 
         return await this.dao.all(sql, [studentUUID]);

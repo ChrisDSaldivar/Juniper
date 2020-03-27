@@ -30,7 +30,7 @@ exports.getConnectedStudents = async (req, res) => {
         })
     );
     res.send(JSON.stringify({students}));
-}
+};
 
 exports.createCourse = async (req, res) => {
     const {prefix, courseNum, sectionNum} = req.body;
@@ -38,8 +38,8 @@ exports.createCourse = async (req, res) => {
     const instructorUUID = req.session.uuid;
     await CourseModel.addCourse(prefix, courseNum, sectionNum, courseCode, instructorUUID);
     res.json({courseCode});
-}
+};
 
 exports.getCreateCourseForm = (req, res) => {
     res.render('createCourse');
-}
+};

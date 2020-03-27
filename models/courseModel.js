@@ -14,6 +14,16 @@ class CourseModel {
         `;
         await this.dao.run(sql, [uuidV4(), prefix, courseNum, sectionNum, courseCode, instructorUUID]);
     }
+
+    async getCourseUUID (prefix, courseNum, sectionNum) {
+        const sql = `
+            SELECT courseUUID
+            FROM Courses
+            WHERE prefix=? and courseNum=? and sectionNum=?
+        `;
+
+        return await this.dao.get(sql, [prefix, courseNum, sectionNum]);
+    }
 }
 
 module.exports = CourseModel;

@@ -1,18 +1,17 @@
-// const Student                = require('../models/studentModel.js');
+const StudentModel = new (require('../models/StudentModel.js'));
+const CourseModel  = new (require('../models/courseModel'));
 // const {screenShareValidator} = require('../validators/StudentValidators');
 
 exports.screenShare = async (req, res) => {
-    res.render('screenShare', {title: "ScreenShare"});
+    res.render('studentPage', {title: "Courses"});
 };
 
-exports.updateScreenshot = async (req, res) => {
-    res.render('allScreens', {title: "Active Students"});
+exports.addCourse = async (req, res) => {
+    const {courseCode} = req.body;
+    await StudentModel.addCourse(req.session.uuid, courseCode);
 };
 
-exports.initiateScreenShare = async (req, res) => {
-
-};
-
-exports.initiateAudioShare = async (req, res) => {
-
+exports.getCourses = async (req, res) => {
+    const courses = await StudentModel.getCourses(req.session.uuid);
+    res.json({courses});
 };

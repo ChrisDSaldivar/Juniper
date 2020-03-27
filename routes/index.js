@@ -36,13 +36,24 @@ router.get('/record',
     (req, res) => {res.render('screenRecorder.pug')}
 )
 
+// Students
+router.get('/student/courses',
+    validateStudentConnection,
+    catchErrors(studentController.getCourses)
+);
+
+router.put('/student/courses',
+    validateStudentConnection,
+    catchErrors(studentController.addCourse)
+);
+
 // Courses
-router.get('/createCourse',
+router.get('/instructor/courses',
     validateInstructorConnection,
     courseController.getCreateCourseForm
 );
 
-router.put('/createCourse',
+router.put('/instructor/courses',
     validateInstructorConnection,
     catchErrors(courseController.createCourse)
 );

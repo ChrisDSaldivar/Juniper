@@ -17,14 +17,13 @@ async function process () {
         sectionNum: document.getElementById('sectionNum').value,
     }
     console.log(data)
-    const res = await fetch('https://juniper.beer/createCourse', {
+    const res = await fetch('https://juniper.beer/instructor/courses', {
         method: 'PUT',
-        redirect: 'follow',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data),
-    })
+    });
     if (res.status === 200) {
         const resData = await res.json();
         console.log(resData);

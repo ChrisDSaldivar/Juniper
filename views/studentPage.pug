@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title= `${title} | ${h.siteName}`
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/connect.css')
+    link(rel='stylesheet', href='/css/flash.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
+  body
+    div.container
+        section.card
+            h1 Courses
+            ul#courseList
+            form#addCourse
+                input#courseCode(type="text" placeholder="Course Code")
+                button Submit
+    script(src="/js/student.js")
