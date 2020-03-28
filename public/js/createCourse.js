@@ -12,9 +12,10 @@ function main () {
 
 async function process () {
     const data = {
-        prefix: document.getElementById('prefix').value.trim().toLowerCase(),
-        courseNum: document.getElementById('courseNum').value.trim().toLowerCase(),
-        sectionNum: document.getElementById('sectionNum').value,
+        prefix: document.getElementById('prefix').value.trim(),
+        courseNum: document.getElementById('courseNum').value.trim(),
+        sectionNum: document.getElementById('sectionNum').value.trim(),
+        courseName: document.getElementById('courseName').value.trim(),
     }
     console.log(data)
     const res = await fetch('https://juniper.beer/instructor/courses', {

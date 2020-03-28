@@ -8,11 +8,12 @@
 h1 {
     font-size: 2em;
     margin: 0;
-    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .card {
-    height: 80%;
+    /* height: 80%; */
     width: 75%;
     border-radius: 15px;
     display: grid;
@@ -22,10 +23,14 @@ h1 {
 }
 
 #addCourse-form {
+    margin-top: 1em;
+    margin-bottom: 1em;
     display: grid;
     place-items: center;
     grid-template-rows: repeat(3, 1fr);
-    width: 80%;
+    width: 50%;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
 }
 
 .nameRow {
@@ -70,18 +75,60 @@ input[type='button']:active {
     }
 }
 
-ul {
-    background-color: blue;
-    list-style: none;
+.courseList {
+    /* background-color: blue; */
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 25px;
+    width: 80%;
 }
 
-li {
-    background-color: green;
+.course {
+    /* background-color: green; */
     text-decoration: none;
     font-family: 'Cutive Mono', monospace;
-    font-size: 1.4em;
+    font-size: 1.25em;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+    height: 2.9em;   
+    display: grid;
+    padding: 10px;
+    grid-template-areas: 
+        "courseHeader instHeader instHeader courseNameHeader courseNameHeader joinBtn"
+        "courseNumber instructor instructor courseName courseName joinBtn"
+    ;
+    width: 100%;
+    column-gap: 10px;
 }
 
-/* input {
-    width: 20em;
-} */
+.header {
+    color: grey;
+    font-size: 1em;
+}
+
+.courseHeader {
+    grid-area: courseHeader;
+}
+
+.instHeader {
+    grid-area: instHeader;
+}
+
+.courseNumber {
+    grid-area: courseNumber;
+}
+
+.instructor {
+    grid-area: instructor;
+}
+
+.joinBtn {
+    grid-area: joinBtn;
+}
+
+.courseNameHeader {
+    grid-area: courseNameHeader;
+}
+
+.courseName {
+    grid-area: courseName;
+}

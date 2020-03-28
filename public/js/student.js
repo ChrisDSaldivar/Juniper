@@ -1,9 +1,11 @@
 const body = document.querySelector('body')
-body.onload = main;
+window.onload = main;
 const courseList = document.getElementById("courseList");
 const flashes = document.querySelector(".flashes");
+let courseTemplate;
 
 function main () {
+    courseTemplate = document.querySelector("#courseTemplate");
     getCourses();
     document.getElementById('courseCode').focus();
 
@@ -47,12 +49,22 @@ async function getCourses () {
         console.log(courses)
         courseList.innerHTML = "";
         for (const course of courses) {
-            const {lastName, firstName, prefix, courseNum, sectionNum} = course;
-            const li = document.createElement('li');
-            li.textContent = `${prefix}${courseNum}-${sectionNum} | ${lastName}, ${firstName}`;
-            courseList.appendChild(li);
+            const {lastName, firstName, prefix, courseNum, sectionNum, courseUUID, courseName} = course;
+            const newCourse = courseTemplate.content.cloneNode(true);
+            console.log(newCourse);
+            newCourse.querySelector(".courseNumber").textContent = `${prefix}${courseNum}-${sectionNum}`;
+            newCourse.querySelector(".instructor").textContent = `${lastName}, ${firstName}`;
+            newCourse.querySelector(".courseName").textContent = `${courseName}`;
+            newCourse.querySelector("button").setAttribute("courseUUID", courseUUID);
+            newCourse.querySelector("button").onclick = joinCourse;
+            courseList.appendChild(newCourse);
         }
     }
+}
+
+function joinCourse (event) {
+    console.log(this.getAttribute("courseUUID"));
+    console.log("Joining")
 }
 
 function createFlash (message, level) {

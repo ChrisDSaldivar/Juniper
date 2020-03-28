@@ -33,10 +33,10 @@ exports.getConnectedStudents = async (req, res) => {
 };
 
 exports.createCourse = async (req, res) => {
-    const {prefix, courseNum, sectionNum} = req.body;
+    const {prefix, courseNum, sectionNum, courseName} = req.body;
     const courseCode = cc.generate({ parts : 4 });
     const instructorUUID = req.session.uuid;
-    await CourseModel.addCourse(prefix, courseNum, sectionNum, courseCode, instructorUUID);
+    await CourseModel.addCourse(prefix, courseNum, sectionNum, courseCode, instructorUUID, courseName);
     res.json({courseCode});
 };
 

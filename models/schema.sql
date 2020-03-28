@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS Courses (
     courseUUID	TEXT NOT NULL,
 	prefix    TEXT NOT NULL,
 	courseNum	TEXT NOT NULL,
-	sectionNum	INTEGER NOT NULL,
+	sectionNum	TEXT NOT NULL,
 	courseCode	TEXT NOT NULL,
+	courseName TEXT NOT NULL,
 	instructorUUID	TEXT NOT NULL,
 	PRIMARY KEY(courseUUID),
 	UNIQUE (prefix, courseNum, sectionNum)
