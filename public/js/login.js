@@ -14,7 +14,6 @@ async function connect () {
     const data = {
         email: document.getElementById('email').value.trim().toLowerCase(),
         password: document.getElementById('password').value.trim().toLowerCase(),
-        courseNumber: document.getElementById('courseNumber').value,
     }
     console.log(data)
     const res = await fetch('https://juniper.beer/login', {

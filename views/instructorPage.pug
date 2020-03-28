@@ -1,0 +1,25 @@
+doctype html
+html
+    head
+        title= `${title} | ${h.siteName}`
+        link(rel='stylesheet', href='/css/style.css')
+        link(rel='stylesheet', href='/css/instructor.css')
+        link(rel='stylesheet', href='/css/flash.css')
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(href="https://fonts.googleapis.com/css?family=Cutive+Mono|Raleway&display=swap" rel="stylesheet")
+    body
+        div.container
+            section.card
+                h1 Courses
+                section.courseList#courseList
+        .flashes
+        script(src="/js/instructor.js")
+    template#courseTemplate
+        section.course
+            section.header.courseHeader Course
+            section.header.instHeader Instructor
+            section.header.courseNameHeader Course Name
+            section.courseNumber
+            section.courseName
+            section.instructor
+            button.joinBtn Join

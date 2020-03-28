@@ -52,4 +52,8 @@ exports.joinCourse = async (req, res) => {
     } else {
         res.sendStatus(403);
     }
-}
+};
+
+exports.courseViewer = (req, res) => {
+    res.render('allScreens', {title: "Active Students"});
+};

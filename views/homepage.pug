@@ -10,24 +10,10 @@ html
   body
     div.container
         section.card
-            h1 Connect
+            h1 Login
             form#connect-form.connect-form
                 section.nameRow
                     input#email(type="text", name="email" placeholder="Email")
                     input#password(type="text", name="password" placeholder="Password")
-                select#courseNumber
-                  option(value="CS1114") CS1114
-                  option(value="CS2124") CS2124
-                  option(value="CS3613") CS3613
                 button#submit Submit
-    .flashes
-      .flash(class='flash--info')
-        p.flash__text This is an info flash message.
-        button.flash__remove(onClick="this.parentElement.remove()") &times;
-      .flash(class='flash--success')
-        p.flash__text This is a success flash message.
-        button.flash__remove(onClick="this.parentElement.remove()") &times;
-      .flash(class='flash--error')
-        p.flash__text This is an error flash message.
-        button.flash__remove(onClick="this.parentElement.remove()") &times;
-    script(src="/js/connect.js")
+    script(src="/js/login.js")

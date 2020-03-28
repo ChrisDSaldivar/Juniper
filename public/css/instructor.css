@@ -19,6 +19,7 @@ h1 {
     display: grid;
     place-items: center;
     background-color: whitesmoke;
+    padding: 20px;
     /* grid-template-rows: repeat(3, 1fr); */
 }
 

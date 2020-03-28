@@ -2,12 +2,14 @@ const express          = require('express');
 const router           = express.Router();
 const courseController = require('../controllers/courseController');
 const studentController = require('../controllers/studentController');
+const instructorController = require('../controllers/InstructorController');
 const authController = require('../controllers/AuthController');
 const { catchErrors }    = require('../handlers/errorHandlers');
 
 router.use('/student', validateStudentConnection);
 router.use('/instructor', validateInstructorConnection);
 router.use('/assistant', validateAssistantConnection);
+router.use('/proctor', validateProctorConnection);
 
 router.get('/', 
     checkRedirect,
@@ -15,9 +17,9 @@ router.get('/',
 );
 
 
-router.get('/screens', 
+router.get('/proctor/screens/:courseUUID', 
     validateProctorConnection,
-    catchErrors(studentController.updateScreenshot)
+    catchErrors(courseController.courseViewer)
 );
 
 router.get('/view', 
@@ -25,7 +27,7 @@ router.get('/view',
     catchErrors(courseController.getScreenViewer)
 );
 
-router.get('/courses/connectedStudents', 
+router.get('/courses/:courseUUID/connectedStudents', 
     validateProctorConnection,
     catchErrors(courseController.getConnectedStudents)
 );
@@ -33,6 +35,15 @@ router.get('/courses/connectedStudents',
 router.get('/record',
     (req, res) => {res.render('screenRecorder.pug')}
 )
+
+// Instructor
+router.get('/instructor', 
+    instructorController.instructorPage
+);
+
+router.get('/instructor/courses', 
+    catchErrors(instructorController.getCourses)
+);
 
 // Students
 router.get('/student',
@@ -88,7 +99,7 @@ function checkRedirect (req, res, next) {
     if (req.session.student) {
         return res.redirect('/student');
     } else if (req.session.instructor) {
-        return res.redirect('/screens');
+        return res.redirect('/instructor');
     } else if (req.session.assistant) {
         return res.redirect('/screens');
     }
