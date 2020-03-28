@@ -11,7 +11,7 @@ class StudentModel {
         FROM Courses 
         WHERE courseCode=?
         `
-        const data = this.dao.get(sql, [courseCode]);
+        const data = await this.dao.get(sql, [courseCode]);
         const {courseUUID} = data;
 
         sql = `
@@ -21,11 +21,14 @@ class StudentModel {
         `;
         
         await this.dao.run(sql, [studentUUID, courseUUID]);
+        return courseUUID;
     }
 
     async getCourses (studentUUID) {
         const sql = `
-        SELECT courseUUID, prefix, courseNum, sectionNum FROM Roster WHERE studentUUID=?
+        SELECT Courses.courseUUID
+        FROM Courses JOIN Roster ON Courses.courseUUID=Roster.courseUUID
+        WHERE Roster.studentUUID=?
         `;
 
         return await this.dao.all(sql, [studentUUID]);

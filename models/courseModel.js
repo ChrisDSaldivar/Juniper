@@ -6,6 +6,23 @@ class CourseModel {
         this.dao = dao;
     }
 
+    async getCourseInfo (courseUUID) {
+        let sql = `
+            SELECT prefix, courseNum, sectionNum, courseCode, instructorUUID
+            FROM Courses
+            Where courseUUID=?
+        `;
+        let {instructorUUID, ...data} = await this.dao.get(sql, [courseUUID]);
+
+        sql = `
+            SELECT firstName, lastName
+            FROM Users
+            Where userUUID=?
+        `;
+        let {firstName, lastName} = await this.dao.get(sql, [instructorUUID]);
+        return {...data, firstName, lastName};
+    }
+
     async addCourse (prefix, courseNum, sectionNum, courseCode, instructorUUID) {
         const sql = `
             INSERT INTO Courses

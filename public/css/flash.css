@@ -15,6 +15,20 @@
   width: 80%;
   left: 10%;
 }
+.flash:after {
+  content: '';
+  display: block;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  background: white;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  z-index: -1;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
 .flash {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   margin-bottom: 2rem;
@@ -42,19 +56,7 @@
   background: grey;
   color: white;
 }
-.flash:after {
-  content: '';
-  display: block;
-  background: white;
-  position: absolute;
-  width: calc(100% - 12px);
-  height: calc(100% - 12px);
-  top: 6px;
-  left: 6px;
-  z-index: -1;
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-}
+
 .flash--success {
   border-radius: 15px;
   background: linear-gradient(135deg, rgb(26, 185, 111) 0%, rgb(17, 156, 63) 100%);
@@ -70,4 +72,3 @@
 .flash p {
   margin: 0;
 }
- 

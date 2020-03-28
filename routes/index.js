@@ -13,9 +13,7 @@ router.get('/',
     checkRedirect,
     catchErrors(courseController.getCourses)
 );
-router.get('/student',
-    catchErrors(studentController.screenShare)
-);
+
 
 router.get('/screens', 
     validateProctorConnection,
@@ -27,7 +25,7 @@ router.get('/view',
     catchErrors(courseController.getScreenViewer)
 );
 
-router.get('/students', 
+router.get('/courses/connectedStudents', 
     validateProctorConnection,
     catchErrors(courseController.getConnectedStudents)
 );
@@ -37,14 +35,20 @@ router.get('/record',
 )
 
 // Students
+router.get('/student',
+    catchErrors(studentController.studentPage)
+);
+
 router.get('/student/courses',
-    validateStudentConnection,
     catchErrors(studentController.getCourses)
 );
 
 router.put('/student/courses',
-    validateStudentConnection,
     catchErrors(studentController.addCourse)
+);
+
+router.get('/student/course',
+    catchErrors(courseController.joinCourse)
 );
 
 // Courses
