@@ -47,8 +47,8 @@ router.put('/student/courses',
     catchErrors(studentController.addCourse)
 );
 
-router.get('/student/course',
-    catchErrors(courseController.joinCourse)
+router.get('/student/course/:courseUUID',
+    courseController.joinCourse
 );
 
 // Courses

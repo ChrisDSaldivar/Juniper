@@ -40,7 +40,6 @@ class UserModel {
     }
 
     async instructorCodeExists (code) {
-        console.log(code);
         const sql = `SELECT 1 FROM Instructor_Codes WHERE code=?`;
         return await this.dao.get(sql, [code]);
     }

@@ -23,7 +23,6 @@ const wsServer = new WebSocket.Server({
  updates to the session unless the user reloads
 */
 server.on('upgrade', function(request, socket, head) {
-    console.log(request.headers)
     app.get('sessionParser')(request, {}, () => {
         wsServer.handleUpgrade(request, socket, head, function(ws) {
             wsServer.emit('connection', ws, request);
@@ -40,8 +39,8 @@ wsServer.on('connection', function connection (ws, request) {
     const firstName = request.session.firstName;
     ws.firstName = firstName;
     ws.id = request.session.uuid;
-    ws.courseNumber = request.session.courseNumber;
-    ws.role = request.session.role; // this doesn't exist yet
+    ws.courseUUID = request.session.courseUUID;
+    ws.role = request.session.role;
 
     connections.addConnection(ws);
     ws.on('message', function incoming (message) {

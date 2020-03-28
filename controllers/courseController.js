@@ -43,3 +43,13 @@ exports.createCourse = async (req, res) => {
 exports.getCreateCourseForm = (req, res) => {
     res.render('createCourse');
 };
+
+exports.joinCourse = async (req, res) => {
+    const courseUUID = req.params.courseUUID;
+    if (await CourseModel.inClass(req.session.uuid, courseUUID)) {
+        req.session.courseUUID = courseUUID;
+        res.render('screenShare');
+    } else {
+        res.sendStatus(403);
+    }
+}

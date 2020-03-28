@@ -51,7 +51,6 @@ async function getCourses () {
         for (const course of courses) {
             const {lastName, firstName, prefix, courseNum, sectionNum, courseUUID, courseName} = course;
             const newCourse = courseTemplate.content.cloneNode(true);
-            console.log(newCourse);
             newCourse.querySelector(".courseNumber").textContent = `${prefix}${courseNum}-${sectionNum}`;
             newCourse.querySelector(".instructor").textContent = `${lastName}, ${firstName}`;
             newCourse.querySelector(".courseName").textContent = `${courseName}`;
@@ -62,9 +61,23 @@ async function getCourses () {
     }
 }
 
-function joinCourse (event) {
-    console.log(this.getAttribute("courseUUID"));
+async function joinCourse (event) {
+    const courseUUID = this.getAttribute("courseUUID");
+    console.log(courseUUID);
     console.log("Joining")
+    const res = await fetch(`https://juniper.beer/student/course/${courseUUID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: "follow"
+    });
+    console.log(res)
+    if (res.status === 200) {
+        window.location.href = res.url;
+    } else if (res.status === 403) {
+        createFlash("You are not in this course's roster", "error");
+    }
 }
 
 function createFlash (message, level) {

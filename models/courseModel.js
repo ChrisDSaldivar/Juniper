@@ -41,6 +41,11 @@ class CourseModel {
 
         return await this.dao.get(sql, [prefix, courseNum, sectionNum]);
     }
+
+    async inClass (studentUUID, courseUUID) {
+        const sql = `SELECT 1 FROM Roster WHERE studentUUID=? and courseUUID=?`;
+        return await this.dao.get(sql, [studentUUID, courseUUID]);
+    }
 }
 
 module.exports = CourseModel;
