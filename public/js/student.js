@@ -147,8 +147,27 @@ async function getProctoredCourses () {
             newCourse.querySelector(".instructor").textContent = `${lastName}, ${firstName}`;
             newCourse.querySelector(".courseName").textContent = `${courseName}`;
             newCourse.querySelector("button").setAttribute("courseUUID", courseUUID);
-            newCourse.querySelector("button").onclick = joinCourse;
+            newCourse.querySelector("button").onclick = joinCourseProctor;
             courseList.appendChild(newCourse);
         }
+    }
+}
+
+async function joinCourseProctor (event) {
+    const courseUUID = this.getAttribute("courseUUID");
+    console.log(courseUUID);
+    console.log("Joining")
+    const res = await fetch(`https://juniper.beer/proctor/screens/${courseUUID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: "follow"
+    });
+    console.log(res)
+    if (res.status === 200) {
+        window.location.href = res.url;
+    } else if (res.status === 403) {
+        createFlash("You are not a proctor for this course!", "error");
     }
 }
