@@ -46,6 +46,41 @@ class CourseModel {
         const sql = `SELECT 1 FROM Roster WHERE studentUUID=? and courseUUID=?`;
         return await this.dao.get(sql, [studentUUID, courseUUID]);
     }
+
+    async authorizedProctor (userUUID, courseUUID, isInstructor) {
+        let sql = `
+            SELECT 1
+            FROM ${isInstructor ? 'Courses' : 'Proctors'}
+            WHERE ${isInstructor ? 'instructorUUID' : 'proctorUUID'}=? and courseUUID=?
+        `;
+        return await this.dao.get(sql, [userUUID, courseUUID]);
+    }
+
+    async isAuthorizedInstructor (instructorUUID, courseUUID) {
+        let sql = `
+            SELECT 1
+            FROM Courses
+            WHERE instructorUUID=? and courseUUID=?
+        `;
+        return await this.dao.get(sql, [instructorUUID, courseUUID]);
+    }
+
+    async addProctorCode (proctorCode, courseUUID) {
+        let sql = `
+            INSERT INTO Proctor_Codes (code, courseUUID)
+            VALUES (?, ?)
+        `;
+        return await this.dao.get(sql, [proctorCode, courseUUID]);
+    }
+
+    async getProctorCode (courseUUID) {
+        const sql = `
+            SELECT code
+            FROM Proctor_Codes
+            WHERE courseUUID=?
+        `
+        return await this.dao.get(sql, [courseUUID]);
+    }
 }
 
 module.exports = CourseModel;

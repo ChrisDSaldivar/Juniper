@@ -7,7 +7,7 @@ let students = [];
 let idMap = {};
 
 async function main(){
-    const res = await fetch('https://juniper.beer/courses/connectedStudents', {
+    const res = await fetch('https://juniper.beer/proctor/courses/connectedStudents', {
         method: "GET",
     });
     if (res.status !== 200) {

@@ -54,7 +54,9 @@ wsServer.on('connection', function connection (ws, request) {
         }
         console.log(`\nreceived: ${JSON.stringify(msg, null, 2)} from: ${firstName}`);
     });
-
+    console.log('\nNew Connection:')
+    console.log(connections);
+    console.log();
     ws.on('close', () => {connections.remove(ws);});
 
     // Utility functions

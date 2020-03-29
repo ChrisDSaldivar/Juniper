@@ -14,9 +14,13 @@ html
                 section.courseList#courseList
                 form#addCourse-form
                     h2 Add Course
-                    input#courseCode(type="text" placeholder="Course Code" size=22 )
+                    input#courseCode(type="text" placeholder="Course Code" size=22)
                     button Submit
         .flashes
+        if isProctor
+            section.card
+                h1 Proctored Courses
+                section.courseList#proctorCourseList
         script(src="/js/student.js")
     template#courseTemplate
         section.course

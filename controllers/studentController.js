@@ -3,7 +3,7 @@ const CourseModel  = new (require('../models/courseModel'));
 // const {screenShareValidator} = require('../validators/StudentValidators');
 
 exports.studentPage = async (req, res) => {
-    res.render('studentPage', {title: "Courses"});
+    res.render('studentPage', {title: "Courses", isProctor: req.session.isProctor});
 };
 
 exports.addCourse = async (req, res) => {

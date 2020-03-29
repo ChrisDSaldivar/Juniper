@@ -57,3 +57,7 @@ input[type='button']:active {
        font-size: .75em; 
     }
 }
+
+.mono {
+    font-family: 'Courier New', Courier, monospace;
+}

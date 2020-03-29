@@ -3,39 +3,19 @@ window.onload = main;
 const courseList = document.getElementById("courseList");
 const flashes = document.querySelector(".flashes");
 let courseTemplate;
+let courses;
 
 function main () {
+    document.querySelector("#addProctor").onclick = openGenProctorForm;
+    setTimeout(() => {
+        document.querySelector("#addProctor").click();
+        document.getElementById("genProctorCode").click();
+    }, 250);
+    document.querySelector("#exitProctorForm").onclick = exitProctorForm;
+    document.querySelector("#addProctorForm").onsubmit = genProctorCode;
     courseTemplate = document.querySelector("#courseTemplate");
     getCourses();
-
-    // document.getElementById('addCourse-form').onsubmit = (event) => {
-    //     event.preventDefault();
-    //     addCourse();
-    //     return false;
-    // };
 }
-
-// async function addCourse () {
-//     const courseCode = document.getElementById('courseCode').value;
-//     console.log(courseCode);
-//     const res = await fetch('https://juniper.beer/student/courses', {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({courseCode})
-//     })
-//     console.log(res);
-//     if (res.status === 200) {
-//         const resData = await res.json();
-//         resData;
-//         console.log(resData)
-//         createFlash("You've succesfully added the course!", "success");
-//         getCourses();
-//     } else {
-//         createFlash("Unable to add course", "error");
-//     }
-// }
 
 async function getCourses () {
     const res = await fetch('https://juniper.beer/instructor/courses', {
@@ -44,7 +24,7 @@ async function getCourses () {
     console.log(res);
     if (res.status === 200) {
         const resData = await res.json();
-        const courses = resData.courses;
+        courses = resData.courses;
         console.log(resData)
         courseList.innerHTML = "";
         for (const course of courses) {
@@ -60,8 +40,69 @@ async function getCourses () {
     }
 }
 
-async function joinCourse () {
+async function joinCourse (event) {
+    const courseUUID = this.getAttribute("courseUUID");
+    console.log(courseUUID);
+    console.log("Joining")
+    const res = await fetch(`https://juniper.beer/proctor/screens/${courseUUID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: "follow"
+    });
+    console.log(res)
+    if (res.status === 200) {
+        window.location.href = res.url;
+    } else if (res.status === 403) {
+        createFlash("You do not have permission to view this course!", "error");
+    }
+}
 
+function openGenProctorForm () {
+    document.querySelector(".mainView").classList.add("blur");
+    document.querySelector("#addProctorModal").classList.remove("hidden");
+    const courseList = document.querySelector("#courseList-proctorCodes"); 
+    courses.forEach( course => {
+        const {prefix, courseNum, sectionNum, courseName, courseUUID} = course;
+        const option = document.createElement('option');
+        option.textContent = `${prefix}${courseNum}-${sectionNum} ${courseName}`;
+        option.setAttribute("courseUUID", courseUUID);
+        console.log(option);
+        courseList.appendChild(option);
+    });
+}
+
+function exitProctorForm () {
+    document.querySelector(".mainView").classList.remove("blur");
+    document.querySelector("#addProctorModal").classList.add("hidden");
+}
+
+async function genProctorCode (event) {
+    event.preventDefault();
+    const select = document.querySelector("#courseList-proctorCodes");
+    const courseUUID = select.options[select.selectedIndex].getAttribute("courseUUID");
+    const courseName = select.options[select.selectedIndex].textContent;
+    const res = await fetch("https://juniper.beer/course/proctorCode", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({courseUUID})
+    });
+    if (res.status === 200) {
+        const data = await res.json();
+        console.log(data);
+        createFlash(`The proctor code for ${courseName} is: <span class="mono">${data.proctorCode} <i class="far fa-copy" onmouseout="resetToolTip();" onclick="copy('${data.proctorCode}');"><span class="tooltip hidden">Copy</span></i></span>`, "success");
+
+    } else if (res.status === 409) {
+        const data = await res.json();
+        console.log(data);
+        createFlash(`A proctor code for ${courseName} already exists. It is: <span class="mono">${data.proctorCode} <i class="far fa-copy" onmouseout="resetToolTip();" onclick="copy('${data.proctorCode}');"><span class="tooltip hidden">Copy</span></i></span>`, "info");
+    } else {
+        createFlash(`Failed to create proctor code for ${courseName}!`, "fail");
+    }
+    return false;
 }
 
 function createFlash (message, level) {
@@ -75,4 +116,13 @@ function createFlash (message, level) {
     div.innerHTML = flash.trim();
     flash = div.firstChild;
     flashes.appendChild(flash);
+}
+
+async function copy (text) {
+    await navigator.clipboard.writeText(text);
+    document.querySelector("span.tooltip").textContent = "Copied!";
+}
+
+function resetToolTip () {
+    document.querySelector("span.tooltip").textContent = "Copy";
 }

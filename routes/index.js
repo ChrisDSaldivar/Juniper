@@ -17,10 +17,7 @@ router.get('/',
 );
 
 
-router.get('/proctor/screens/:courseUUID', 
-    validateProctorConnection,
-    catchErrors(courseController.courseViewer)
-);
+
 
 router.get('/view', 
     validateProctorConnection,
@@ -37,12 +34,33 @@ router.get('/record',
 )
 
 // Instructor
+router.get('/proctor/screens/:courseUUID',
+    catchErrors(courseController.courseViewer)
+);
+
+router.get('/proctor/courses/connectedStudents',
+    catchErrors(courseController.getConnectedStudents)
+);
+
 router.get('/instructor', 
     instructorController.instructorPage
 );
 
 router.get('/instructor/courses', 
     catchErrors(instructorController.getCourses)
+);
+
+router.get('/instructor/addCourse',
+    courseController.getCreateCourseForm
+);
+
+router.put('/instructor/courses',
+    catchErrors(courseController.createCourse)
+);
+
+router.put('/course/proctorCode',
+    validateInstructorConnection,
+    catchErrors(courseController.genProctorCode)
 );
 
 // Students
@@ -63,15 +81,7 @@ router.get('/student/course/:courseUUID',
 );
 
 // Courses
-router.get('/instructor/courses',
-    validateInstructorConnection,
-    courseController.getCreateCourseForm
-);
 
-router.put('/instructor/courses',
-    validateInstructorConnection,
-    catchErrors(courseController.createCourse)
-);
 
 // User accounts
 router.post('/register',

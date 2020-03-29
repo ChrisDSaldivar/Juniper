@@ -7,11 +7,24 @@ html
         link(rel='stylesheet', href='/css/flash.css')
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(href="https://fonts.googleapis.com/css?family=Cutive+Mono|Raleway&display=swap" rel="stylesheet")
+        script(src="https://kit.fontawesome.com/c7e45398bd.js" crossorigin="anonymous")
     body
         div.container
-            section.card
-                h1 Courses
-                section.courseList#courseList
+            .mainView
+                section.card
+                    h1 Courses
+                    section.courseList#courseList
+                .courseManagement
+                    button#addCourse(onclick="window.location.href = `/instructor/addCourse`;") Add Course
+                    button#addProctor Add Proctor
+            #addProctorModal.hidden
+                .addProctorCard
+                    h2 Generate Proctor Code
+                    form#addProctorForm.addProctorForm
+                        select#courseList-proctorCodes(name="courses")
+                        button#genProctorCode Submit
+                    button#exitProctorForm &times;
+
         .flashes
         script(src="/js/instructor.js")
     template#courseTemplate

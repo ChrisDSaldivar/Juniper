@@ -54,6 +54,45 @@ exports.joinCourse = async (req, res) => {
     }
 };
 
-exports.courseViewer = (req, res) => {
-    res.render('allScreens', {title: "Active Students"});
+exports.courseViewer = async (req, res) => {
+    const courseUUID = req.params.courseUUID;
+    if (await CourseModel.authorizedProctor(req.session.uuid, courseUUID, req.session.isInstructor)) {
+        req.session.courseUUID = courseUUID;
+        res.render('allScreens', {title: "Active Students"});
+    } else {
+        res.sendStatus(403);
+    }
+};
+
+exports.genProctorCode = async (req, res) => {
+    const instructorUUID = req.session.uuid;
+    const {courseUUID} = req.body;
+    console.log(req.body)
+    console.log("gen")
+    if (await CourseModel.isAuthorizedInstructor(instructorUUID, courseUUID)) {
+        console.log("authorized")
+        let proctorCode = cc.generate({ parts: 4 });
+        console.log(`Generated code for ${courseUUID} is: ${proctorCode}`);
+        try {
+            await CourseModel.addProctorCode(proctorCode, courseUUID);
+            console.log("Added code")
+            res.json({proctorCode});
+        } catch (err) {
+            if (err.message.includes("UNIQUE constraint failed") ) {
+                console.log("failed to add")
+                let {code: proctorCode} = await CourseModel.getProctorCode(courseUUID);
+                return res.status(409).json({proctorCode})
+            }
+            throw err;
+        }
+    } else {
+        res.sendStatus(403);
+    }
+};
+
+exports.addProctor = async (req, res) => {
+    const {proctorCode} = req.body;
+    const proctorUUID = req.session.uuid;
+    console.log(proctorUUID);
+    console.log(proctorCode);
 };
