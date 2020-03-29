@@ -1,8 +1,10 @@
-const StudentModel = new (require('../models/StudentModel.js'));
+const StudentModel = new (require('../models/StudentModel'));
 const CourseModel  = new (require('../models/courseModel'));
 // const {screenShareValidator} = require('../validators/StudentValidators');
 
 exports.studentPage = async (req, res) => {
+    console.log(req.session);
+    
     res.render('studentPage', {title: "Courses", isProctor: req.session.isProctor});
 };
 

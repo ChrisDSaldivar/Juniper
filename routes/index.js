@@ -3,12 +3,12 @@ const router           = express.Router();
 const courseController = require('../controllers/courseController');
 const studentController = require('../controllers/studentController');
 const instructorController = require('../controllers/InstructorController');
+const proctorController = require('../controllers/ProctorController');
 const authController = require('../controllers/AuthController');
 const { catchErrors }    = require('../handlers/errorHandlers');
 
 router.use('/student', validateStudentConnection);
 router.use('/instructor', validateInstructorConnection);
-router.use('/assistant', validateAssistantConnection);
 router.use('/proctor', validateProctorConnection);
 
 router.get('/', 
@@ -85,6 +85,11 @@ router.put('/course/proctor',
     catchErrors(courseController.addProctor)
 );
 
+// Proctors
+router.get('/proctor/courses', 
+    catchErrors(proctorController.getCourses),
+);
+
 
 // User accounts
 router.post('/register',
@@ -113,8 +118,6 @@ function checkRedirect (req, res, next) {
         return res.redirect('/student');
     } else if (req.session.instructor) {
         return res.redirect('/instructor');
-    } else if (req.session.assistant) {
-        return res.redirect('/screens');
     }
     next();
 }
@@ -129,15 +132,7 @@ function validateStudentConnection (req, res, next) {
 }
 
 function validateProctorConnection (req, res, next) {
-    if (!(req.session.authenticated && (req.session.assistant || req.session.instructor))) {
-        return res.redirect('/');
-    } else {
-        next();
-    }
-}
-
-function validateAssistantConnection (req, res, next) {
-    if (!req.session.authenticated || !req.session.assistant) {
+    if (!(req.session.authenticated && (req.session.proctor || req.session.instructor))) {
         return res.redirect('/');
     } else {
         next();

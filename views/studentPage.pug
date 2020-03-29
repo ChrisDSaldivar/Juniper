@@ -18,7 +18,10 @@ html
                         input#courseCode(type="text" placeholder="Course Code" size=22)
                         button Submit
                 button#addProctor Enter Proctor Code
-        
+                if isProctor
+                    section.card
+                        h1 Proctored Courses
+                        section.courseList#proctorCourseList
             #proctorModal.hidden
                 .addProctorCard
                     h2 Proctor Registration
@@ -26,10 +29,6 @@ html
                         input#proctorCode(name="proctorCode" type="text" placeholder="Enter Proctor Code" size=23)
                         button#submitProctorCode Submit
                     button#exitProctorForm &times;
-        if isProctor
-            section.card
-                h1 Proctored Courses
-                section.courseList#proctorCourseList
         .flashes
         script(src="/js/student.js")
     template#courseTemplate

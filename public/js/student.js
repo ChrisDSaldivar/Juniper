@@ -7,6 +7,7 @@ let courseTemplate;
 function main () {
     courseTemplate = document.querySelector("#courseTemplate");
     getCourses();
+    getProctoredCourses();
     document.getElementById('courseCode').focus();
     document.getElementById('addProctor').onclick = openProctorForm;
     document.querySelector("#exitProctorForm").onclick = exitProctorForm;
@@ -126,4 +127,28 @@ async function submitProctorCode () {
         createFlash("Unable to add you to proctor list", "error");
     }
     return false;
+}
+
+async function getProctoredCourses () {
+    const courseList = await document.getElementById("proctorCourseList");
+    const res = await fetch('https://juniper.beer/proctor/courses', {
+        method: 'GET'
+    })
+    console.log(res);
+    if (res.status === 200) {
+        const resData = await res.json();
+        const courses = resData.courses;
+        console.log(courses)
+        courseList.innerHTML = "";
+        for (const course of courses) {
+            const {lastName, firstName, prefix, courseNum, sectionNum, courseUUID, courseName} = course;
+            const newCourse = courseTemplate.content.cloneNode(true);
+            newCourse.querySelector(".courseNumber").textContent = `${prefix}${courseNum}-${sectionNum}`;
+            newCourse.querySelector(".instructor").textContent = `${lastName}, ${firstName}`;
+            newCourse.querySelector(".courseName").textContent = `${courseName}`;
+            newCourse.querySelector("button").setAttribute("courseUUID", courseUUID);
+            newCourse.querySelector("button").onclick = joinCourse;
+            courseList.appendChild(newCourse);
+        }
+    }
 }

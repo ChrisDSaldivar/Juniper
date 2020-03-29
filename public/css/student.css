@@ -10,6 +10,7 @@
     place-items: center;
     height: 100%;
     width: 100%;
+    row-gap: 15px;
 }
 
 h1 {
@@ -20,13 +21,12 @@ h1 {
 }
 
 .card {
-    /* height: 80%; */
     width: 75%;
     border-radius: 15px;
     display: grid;
     place-items: center;
     background-color: whitesmoke;
-    /* grid-template-rows: repeat(3, 1fr); */
+    padding: 10px;
 }
 
 #addCourse-form {

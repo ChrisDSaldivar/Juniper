@@ -107,6 +107,8 @@ exports.addProctor = async (req, res) => {
         res.status(409);
     } else {
         await CourseModel.addProctor(proctorUUID, courseUUID);
+        req.session.isProctor = true;
+        req.session.proctor = true;
     }
 
     res.json({courseName: course});
