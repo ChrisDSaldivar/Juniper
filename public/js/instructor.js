@@ -7,10 +7,6 @@ let courses;
 
 function main () {
     document.querySelector("#addProctor").onclick = openGenProctorForm;
-    setTimeout(() => {
-        document.querySelector("#addProctor").click();
-        document.getElementById("genProctorCode").click();
-    }, 250);
     document.querySelector("#exitProctorForm").onclick = exitProctorForm;
     document.querySelector("#addProctorForm").onsubmit = genProctorCode;
     courseTemplate = document.querySelector("#courseTemplate");
@@ -63,6 +59,7 @@ function openGenProctorForm () {
     document.querySelector(".mainView").classList.add("blur");
     document.querySelector("#addProctorModal").classList.remove("hidden");
     const courseList = document.querySelector("#courseList-proctorCodes"); 
+    courseList.innerHTML = "";
     courses.forEach( course => {
         const {prefix, courseNum, sectionNum, courseName, courseUUID} = course;
         const option = document.createElement('option');
