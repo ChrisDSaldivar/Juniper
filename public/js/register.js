@@ -2,12 +2,18 @@
 const courseList = document.getElementById("courseList");
 const flashes = document.querySelector(".flashes");
 
+const urlParams = new URLSearchParams(window.location.search);
+instructorCode = urlParams.get('instructorCode');
+
 registerMain();
 
 function registerMain () {
     document.querySelector("#register-btn").onclick = openRegisterForm;
     document.querySelector("#exitRegisterForm").onclick = exitRegisterForm;
     document.querySelector("#registerForm").onsubmit = register;
+    if (instructorCode) {
+        openRegisterForm();
+    }
 }
 
 
@@ -34,8 +40,6 @@ async function register (event) {
     }
     const data = {email, password, firstName, lastName};
     console.log(data);
-    const urlParams = new URLSearchParams(window.location.search);
-    const instructorCode = urlParams.get('instructorCode');
     const query = instructorCode ? `?instructorCode=${instructorCode}` : ``;
     const res = await fetch(`https://juniper.beer/register/${query}`, {
         method: "PUT",
