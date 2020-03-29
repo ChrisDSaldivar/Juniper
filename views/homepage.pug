@@ -3,17 +3,35 @@ html
   head
     title= `${title} | ${h.siteName}`
     link(rel='stylesheet', href='/css/style.css')
-    link(rel='stylesheet', href='/css/connect.css')
+    link(rel='stylesheet', href='/css/login.css')
     link(rel='stylesheet', href='/css/flash.css')
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
   body
     div.container
-        section.card
-            h1 Login
-            form#connect-form.connect-form
-                section.nameRow
-                    input#email(type="text", name="email" placeholder="Email")
-                    input#password(type="text", name="password" placeholder="Password")
-                button#submit Submit
+      .mainView
+          section.card
+              h1 Login
+              form#connect-form.connect-form
+                  section.nameRow
+                      input#email(type="email", name="email" placeholder="Email")
+                      input#password(type="password", name="password" placeholder="Password")
+                  button#submit Submit
+              span.register No Account? 
+                button#register-btn Sign Up
+            
+      #modal.hidden
+          .registerCard
+              h2 Generate Proctor Code
+              form#registerForm.registerForm
+                input#email-register(type="email", placeholder="Enter email", required)
+                span.nameRow
+                  input#firstName(type="text", placeholder="Enter first name", required)
+                  input#lastName(type="text", placeholder="Enter last name", required)
+                input#password-register(type="password", name="password", placeholder="Enter Password", required)
+                input#confirmPassword-register(type="password", name="confirmPassword", placeholder="Confirm Password", required)
+                button#submit-register Submit
+              button#exitRegisterForm &times;
+    .flashes
     script(src="/js/login.js")
+    script(src="/js/register.js")

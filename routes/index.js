@@ -92,7 +92,7 @@ router.get('/proctor/courses',
 
 
 // User accounts
-router.post('/register',
+router.put('/register',
     catchErrors(authController.register),
 );
 

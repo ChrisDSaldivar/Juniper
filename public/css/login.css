@@ -5,6 +5,13 @@
     width: 100%;
 }
 
+.mainView {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    width: 100%;
+}
+
 h1 {
     font-size: 2em;
 }
@@ -17,6 +24,7 @@ h1 {
     place-items: center;
     background-color: whitesmoke;
     grid-template-rows: 1fr 3fr;
+    padding: 10px;
 }
 
 .connect-form {
@@ -32,7 +40,7 @@ h1 {
     column-gap: 20px;
 }
 
-input[type='text'] {
+input[type='text'], input[type='password'], input[type='email'] {
     background-color: inherit;
     font-size: 1em;
     padding-bottom: 5px;
@@ -62,8 +70,58 @@ input[type='button']:active {
     background-color: #243b75;
 }
 
-@media only screen and (max-width: 940px) {
-    input[type='text'] { 
-       font-size: .75em; 
-    }
+.register {
+    padding-bottom: 20px;
+}
+
+#modal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(34, 34, 34, 0.589);
+    display: grid;
+    place-items: center;
+}
+
+.registerCard {
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
+    width: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.registerForm {
+    display: grid;
+    place-items: center;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 15px;
+    width: 80%;
+}
+
+.registerForm button {
+    width: 10rem;
+}
+
+#exitRegisterForm {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: black;
+}
+
+#exitRegisterForm:hover {
+    color: white;
+    background-color: #375bb6;
+}
+
+.hidden {
+    visibility: hidden !important;
+}
+
+.blur {
+    filter: blur(5px);
 }

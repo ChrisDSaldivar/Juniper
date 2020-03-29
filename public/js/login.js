@@ -1,6 +1,7 @@
-document.querySelector('body').onload = main;
+loginMain();
 
-function main () {
+function loginMain () {
+    console.log('main')
     document.getElementById('email').focus();
     document.getElementById('connect-form').onsubmit = (event) => {
         console.log('submitting')

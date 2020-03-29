@@ -2,7 +2,6 @@ const argon2    = require('argon2');
 const UserModel = new (require('../models/UserModel')); // Funky syntax but it makes life easier. parens around require force precedence
 const crypto    = require('crypto');
 
-
 exports.register = async (req, res) => {
     console.log(req.body);
     let registerFunc = registerStudent;
@@ -57,16 +56,17 @@ exports.login = async (req, res) => {
 
 async function registerStudent (req, res) {
     const {email, password, firstName, lastName} = req.body;
+    console.log(req.body);
     const passwordHash = await hashPassword(password);
     await UserModel.addStudent(email, passwordHash, firstName, lastName);
-    res.redirect('/login');
+    res.sendStatus(200);
 }
 
 async function registerInstructor (req, res) {
     const {email, password, firstName, lastName} = req.body;
     const passwordHash = await hashPassword(password);
     await UserModel.addInstructor(email, passwordHash, firstName, lastName);
-    res.redirect('/login');
+    res.sendStatus(200);
 }
 
 async function isValidInstructorCode (email, code) {
