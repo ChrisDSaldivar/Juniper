@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Instructors (
 CREATE TABLE IF NOT EXISTS Proctors (
 	proctorUUID	TEXT NOT NULL,
 	courseUUID	TEXT NOT NULL,
-	PRIMARY KEY(proctorUUID)
+	PRIMARY KEY(proctorUUID, courseUUID)
 );
 
 CREATE TABLE IF NOT EXISTS Roster (
@@ -75,4 +75,11 @@ WHEN new.isInstructor=1
 BEGIN
 INSERT INTO Instructors(instructorUUID)
          VALUES(new.userUUID);
+END;
+
+CREATE TRIGGER IF NOT EXISTS update_proctor_flag AFTER INSERT ON Proctors
+BEGIN
+	UPDATE Users
+	SET isProctor=1
+	WHERE userUUID=new.proctorUUID and isProctor!=1 and isInstructor!=1;
 END;

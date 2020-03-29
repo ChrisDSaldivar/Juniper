@@ -1,4 +1,5 @@
 const CourseModel = new (require('../models/courseModel'));
+const UserModel = new (require('../models/UserModel'));
 const connections = require('./connectionsController');
 const redisClient = require('redis').createClient();
 const {promisify} = require('util');
@@ -95,4 +96,18 @@ exports.addProctor = async (req, res) => {
     const proctorUUID = req.session.uuid;
     console.log(proctorUUID);
     console.log(proctorCode);
-};
+    if (!(await UserModel.userUUIDExists(proctorUUID))) {
+        return res.status(403);
+    }
+    const {courseUUID} = await CourseModel.getCourseWithProctorCode(proctorCode);
+    const {prefix, courseNum, sectionNum, courseName} = await CourseModel.getCourseInfo(courseUUID);
+    const course = `${prefix}${courseNum}-${sectionNum} ${courseName}`;
+    
+    if (await CourseModel.isProctorForCourse(proctorUUID, courseUUID)) {
+        res.status(409);
+    } else {
+        await CourseModel.addProctor(proctorUUID, courseUUID);
+    }
+
+    res.json({courseName: course});
+}

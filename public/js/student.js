@@ -8,6 +8,9 @@ function main () {
     courseTemplate = document.querySelector("#courseTemplate");
     getCourses();
     document.getElementById('courseCode').focus();
+    document.getElementById('addProctor').onclick = openProctorForm;
+    document.querySelector("#exitProctorForm").onclick = exitProctorForm;
+    document.querySelector("#proctorForm").onsubmit = submitProctorCode;
 
     document.getElementById('addCourse-form').onsubmit = (event) => {
         event.preventDefault();
@@ -91,4 +94,36 @@ function createFlash (message, level) {
     div.innerHTML = flash.trim();
     flash = div.firstChild;
     flashes.appendChild(flash);
+}
+
+function openProctorForm () {
+    document.querySelector(".mainView").classList.add("blur");
+    document.querySelector("#proctorModal").classList.remove("hidden");
+}
+
+function exitProctorForm (target) {
+    document.querySelector(".mainView").classList.remove("blur");
+    document.querySelector("#proctorModal").classList.add("hidden");
+}
+
+async function submitProctorCode () {
+    event.preventDefault();
+    const proctorCode = document.querySelector("#proctorCode").value;
+    const res = await fetch('https://juniper.beer/course/proctor', {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({proctorCode})
+    });
+    const {courseName} = await res.json();
+    console.log(courseName);
+    if (res.status === 200) {
+        createFlash(`Succesfully added you to ${courseName}.`, "success");
+    } else if (res.status === 409) {
+        createFlash(`You are already a proctor for ${courseName}`, "error");
+    } else {
+        createFlash("Unable to add you to proctor list", "error");
+    }
+    return false;
 }

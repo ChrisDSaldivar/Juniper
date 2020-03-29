@@ -81,6 +81,36 @@ class CourseModel {
         `
         return await this.dao.get(sql, [courseUUID]);
     }
+
+    async addProctor (proctorUUID, courseUUID) {
+        const sql = `
+            INSERT INTO Proctors (proctorUUID, courseUUID)
+            VALUES (?, ?)
+        `;
+        await this.dao.run(sql, [proctorUUID, courseUUID]);
+
+        const {prefix, courseNum, sectionNum, courseName} = await this.getCourseInfo(courseUUID);
+        return {courseName: `${prefix}${courseNum}-${sectionNum} ${courseName}`};
+    }
+
+    async getCourseWithProctorCode (proctorCode) {
+        const sql = `
+            SELECT courseUUID
+            FROM Proctor_Codes
+            WHERE code=?
+        `;
+        return await this.dao.get(sql, [proctorCode]);
+    }
+
+    async isProctorForCourse (proctorUUID, courseUUID) {
+        const sql = `
+            SELECT 1
+            FROM Proctors
+            WHERE proctorUUID=? and courseUUID=?
+        `;
+
+        return this.dao.get(sql, [proctorUUID, courseUUID]);
+    }
 }
 
 module.exports = CourseModel;

@@ -81,6 +81,9 @@ router.get('/student/course/:courseUUID',
 );
 
 // Courses
+router.put('/course/proctor',
+    catchErrors(courseController.addProctor)
+);
 
 
 // User accounts

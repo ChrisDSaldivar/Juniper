@@ -43,6 +43,11 @@ class UserModel {
         const sql = `SELECT 1 FROM Instructor_Codes WHERE code=?`;
         return await this.dao.get(sql, [code]);
     }
+
+    async userUUIDExists (uuid) {
+        const sql = `SELECT 1 FROM Users WHERE userUUID=?`;
+        return await this.dao.get(sql, [uuid]);
+    }
 }
 
 module.exports = UserModel;

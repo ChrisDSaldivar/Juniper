@@ -5,6 +5,13 @@
     width: 100%;
 }
 
+.mainView {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    width: 100%;
+}
+
 h1 {
     font-size: 2em;
     margin: 0;
@@ -128,4 +135,98 @@ input[type='button']:active {
 
 .courseName {
     grid-area: courseName;
+}
+
+
+#proctorModal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(34, 34, 34, 0.589);
+    display: grid;
+    place-items: center;
+}
+
+.addProctorCard {
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
+    width: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.proctorForm {
+    display: grid;
+    place-items: center;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 15px;
+    width: 80%;
+}
+
+.proctorForm button {
+    width: 10rem;
+}
+
+#exitProctorForm {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: black;
+}
+
+#exitProctorForm:hover {
+    color: white;
+    background-color: #375bb6;
+}
+
+.hidden {
+    visibility: hidden !important;
+}
+
+.blur {
+    filter: blur(5px);
+}
+
+.mono {
+    font-family: 'Cutive Mono', monospace;
+}
+
+.flash span {
+    display: block;
+    text-align: center;
+    padding-top: .75rem;
+    font-size: 1.25rem;
+}
+
+.fa-copy {
+    position: relative;
+}
+
+span.tooltip {
+    position: absolute;
+    background-color: rgb(61, 61, 61);
+    padding: 10px;
+    color: white;
+    font-size: 0.75em;
+    font-family: 'Raleway', sans-serif;
+    border-radius: 35px;
+    left: -100%;
+    margin-top: 15px;
+}
+
+span.tooltip::after {
+    content: "";
+    position: absolute;
+    top: -55%;
+    left: 35%;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent rgb(61, 61, 61) transparent;
+}
+
+.fa-copy:hover>span.tooltip {
+    visibility: visible !important;
 }

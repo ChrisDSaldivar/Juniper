@@ -9,18 +9,28 @@ html
         link(href="https://fonts.googleapis.com/css?family=Cutive+Mono|Raleway&display=swap" rel="stylesheet")
     body
         div.container
-            section.card
-                h1 Courses
-                section.courseList#courseList
-                form#addCourse-form
-                    h2 Add Course
-                    input#courseCode(type="text" placeholder="Course Code" size=22)
-                    button Submit
-        .flashes
+            .mainView
+                section.card
+                    h1 Courses
+                    section.courseList#courseList
+                    form#addCourse-form
+                        h2 Add Course
+                        input#courseCode(type="text" placeholder="Course Code" size=22)
+                        button Submit
+                button#addProctor Enter Proctor Code
+        
+            #proctorModal.hidden
+                .addProctorCard
+                    h2 Proctor Registration
+                    form#proctorForm.proctorForm
+                        input#proctorCode(name="proctorCode" type="text" placeholder="Enter Proctor Code" size=23)
+                        button#submitProctorCode Submit
+                    button#exitProctorForm &times;
         if isProctor
             section.card
                 h1 Proctored Courses
                 section.courseList#proctorCourseList
+        .flashes
         script(src="/js/student.js")
     template#courseTemplate
         section.course
