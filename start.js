@@ -3,7 +3,6 @@ global.__basedir = __dirname;
 
 const WebSocket = require('ws');
 const app       = require('./app');
-const uuidV4    = require('uuid').v4;
 const connections = require('./controllers/connectionsController');
 
 app.set('port', process.env.PORT || 9090);
@@ -38,6 +37,8 @@ wsServer.on('connection', function connection (ws, request) {
 
     const firstName = request.session.firstName;
     ws.firstName = firstName;
+    const lastName = request.session.lastName;
+    ws.lastName = lastName;
     ws.id = request.session.uuid;
     ws.courseUUID = request.session.courseUUID;
     ws.role = request.session.role;

@@ -22,7 +22,7 @@ exports.getScreenViewer = async (req, res) => {
 
 exports.getConnectedStudents = async (req, res) => {
     console.log(connections);
-    const studentIDs = connections.getStudentIDs(req.session.courseNumber);
+    const studentIDs = connections.getStudentIDs(req.session.courseUUID);
     const students = await Promise.all(
         studentIDs.map( async (id) => {
             const firstName = await redisClient.hget(id, 'firstName');

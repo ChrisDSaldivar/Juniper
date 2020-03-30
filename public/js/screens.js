@@ -15,6 +15,12 @@ async function main(){
     }
     const data = await res.json();
     students = data.students;
+    const noStudents = document.getElementById("no-students");
+    if (students.length === 0) {
+        noStudents.classList.remove("hidden");
+    } else {
+        noStudents.classList.add("hidden");
+    }
     renderStudents();
 }
 

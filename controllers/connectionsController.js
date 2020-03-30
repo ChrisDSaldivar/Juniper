@@ -1,12 +1,12 @@
 
 const redisClient        = require('redis').createClient();
 const {promisify}        = require('util');
-const uuidV4             = require('uuid').v4;
 
 // promisify stuff
 redisClient.get = promisify(redisClient.get);
 redisClient.lrange = promisify(redisClient.lrange);
 redisClient.exists = promisify(redisClient.exists);
+redisClient.hset   = promisify(redisClient.hset);
 
 class ConnectionController {
     constructor () {
@@ -26,12 +26,14 @@ class ConnectionController {
        this.info = {};
     }
 
-    addConnection (ws) {
+    async addConnection (ws) {
         // extract session data from ws
-        const {courseUUID, role, id} = ws;
+        const {courseUUID, role, id, firstName, lastName} = ws;
         console.log(courseUUID)
         console.log(role)
         console.log(id)
+        await redisClient.hset(id, 'firstName', firstName);
+        await redisClient.hset(id, 'lastName', lastName);
         
         if (this.connections[courseUUID] === undefined) { // if the course doesn't exist yet
             this.addCourse(courseUUID);                   // then create it

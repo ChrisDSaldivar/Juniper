@@ -28,3 +28,11 @@ h1 {
     border: 5px solid rgb(21, 146, 84);
     cursor: pointer;
 }
+
+.hidden {
+    display: none;
+}
+
+#no-students {
+    color: white;
+}
