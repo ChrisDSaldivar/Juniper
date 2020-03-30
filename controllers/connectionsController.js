@@ -48,6 +48,8 @@ class ConnectionController {
         // add the socket to our connections  already exists then 
         // this will just replace the old one
         this.connections[courseUUID][role][id] = ws;
+        console.log("New Connection");
+        console.log(this);
     }
 
     // helper function to create our course object
@@ -63,7 +65,7 @@ class ConnectionController {
     // msg should be an object
     send (msg, target) {
         // if the target doesn't exist then exit
-        if (!this.info[target]) { return; }
+        if (!this.info[target]) { console.log("target doesn't exist"); return; }
 
         // get the target's info so we an get their ws
         const { courseUUID, role } = this.info[target];

@@ -61,8 +61,8 @@ wsServer.on('connection', function connection (ws, request) {
     ws.on('close', () => {connections.remove(ws);});
 
     // Utility functions
-    ws.isOpen   = () => {return this.readyState === 1;};
-    ws.isClosed = () => { return this.readyState === 3;};
+    ws.isOpen   = function () { return this.readyState === 1;};
+    ws.isClosed = function () { return this.readyState === 3;};
 });
 
 // send the offer to the target with the sender's
@@ -75,7 +75,7 @@ function offer (ws, msg) {
         video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections.send(JSON.stringify(res), msg.target);
+    connections.send(res, msg.target);
 }
 
 function answer (ws, msg) {
@@ -86,7 +86,7 @@ function answer (ws, msg) {
         video: msg.video,
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections.send(JSON.stringify(res), msg.target);
+    connections.send(res, msg.target);
 }
 
 function candidate (ws, msg) {
@@ -97,5 +97,5 @@ function candidate (ws, msg) {
         video: msg.video
     };
     console.log(`sending to: ${JSON.stringify(msg.target, null, 2)}`);
-    connections.send(JSON.stringify(res), msg.target);
+    connections.send(res, msg.target);
 }
