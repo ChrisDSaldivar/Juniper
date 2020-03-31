@@ -1,11 +1,49 @@
-const ws = new WebSocket('wss://juniper.beer');
+let ws;
 let start;
 let close;
-ws.onopen = (event) => {
-    start = Date.now();
-    console.log('Websocket is open');
-};
+let retry;
+let target;
+createSocket('wss://juniper.beer');
+const flashes = document.querySelector(".flashes");
 
+function createSocket (url) {
+    ws = new WebSocket(url);
+    ws.onopen = (event) => {
+        start = Date.now();
+        console.log('Websocket is open');
+        clearInterval(retry);
+    };
+    ws.onerror = (e) => {
+        console.log(e.code);
+        window.location.reload();
+    };
+    
+    ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        console.log(JSON.stringify(msg, null, 2));
+        const cmd = msg.cmd;
+        if (cmd === 'offer') {
+            console.log('received offer');
+            target = msg.target;
+            receiveOffer(target, msg.description);
+        } else if (cmd === 'candidate') {
+            recieveRemoteCandidate(msg);
+        } else if (cmd === 'answer') {
+            receiveAnswer(msg);
+        }
+    };
+    
+    ws.onclose = (event) => {
+        close = Date.now();
+        console.log('WEBSOCKET HAS CLOSED');
+        console.log(event);
+        console.log(`socket lasted: ${(close-start)/1000} seconds`);
+        retry = setInterval(() => {
+            createSocket(url);
+            window.location.reload();
+        }, 1000);
+    }
+}
 let audioConnection;
 let videoConnection;
 
@@ -15,11 +53,7 @@ let   myAudio;
 let   myVideo;
 
 const audioConstraints = {
-    audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        sampleRate: 44100
-    }
+    audio: true
 };
 
 const config = {
@@ -35,28 +69,6 @@ document.onload = main;
 
 async function main () {
 
-}
-
-ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    console.log(JSON.stringify(msg, null, 2));
-    const cmd = msg.cmd;
-    if (cmd === 'offer') {
-        console.log('received offer');
-        receiveOffer(msg.target, msg.description);
-    } else if (cmd === 'candidate') {
-        recieveRemoteCandidate(msg);
-    } else if (cmd === 'answer') {
-        receiveAnswer(msg);
-    }
-};
-
-
-ws.onclose = (event) => {
-    close = Date.now();
-    console.log('WEBSOCKET HAS CLOSED');
-    console.log(event);
-    console.log(`socket lasted: ${(close-start)/1000} seconds`);
 }
 
 async function receiveOffer (target, description) {
@@ -79,7 +91,7 @@ async function receiveOffer (target, description) {
     studentAudio.getTracks().forEach( track => audioConnection.addTrack(track, studentAudio));
 
     // setup local description to send peer
-    const localDescription = audioConnection.createAnswer({offerToReceiveAudio: true});
+    const localDescription = audioConnection.createAnswer({offerToReceiveAudio: true, offerToReceiveVideo: false});
     console.log('created answer')
     await audioConnection.setLocalDescription(localDescription);
     console.log('local description set')
@@ -91,7 +103,7 @@ async function receiveOffer (target, description) {
     };
 
     ws.send(JSON.stringify(msg));
-    shareScreen(target);
+    createFlash(shareScreenBtn,"info");
 
     // send connection candidates whenever they're available
     audioConnection.onicecandidate = (event) => {
@@ -116,9 +128,14 @@ async function recieveRemoteCandidate (msg) {
     }
 }
 
-async function shareScreen (target) {
+async function shareScreen () {
     videoConnection = new RTCPeerConnection(config);
+    try {
     myVideo = await navigator.mediaDevices.getDisplayMedia({video: true});
+} catch (err) {
+    console.error(err);
+    
+}
 
     myVideo.getTracks().forEach(track => videoConnection.addTrack(track, myVideo));
 
@@ -155,3 +172,20 @@ async function shareScreen (target) {
 async function receiveAnswer (msg) {
     await videoConnection.setRemoteDescription(msg.description);
 }
+
+function createFlash (message, level) {
+    let flash = `
+    <div class="flash flash--${level}">
+        <p class="flash__text">${message}</p>
+        <button class="flash__remove" onClick="this.parentElement.remove()"> &times;</button>
+    </div>
+    `
+    const div = document.createElement("div")
+    div.innerHTML = flash.trim();
+    flash = div.firstChild;
+    flashes.appendChild(flash);
+}
+
+let shareScreenBtn = `
+    <button onclick="shareScreen();">Share Screen</button>
+`

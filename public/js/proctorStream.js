@@ -1,29 +1,50 @@
-const ws = new WebSocket('wss://juniper.beer');
+let ws;
 let start;
 let close;
-ws.onopen = (event) => {
-    start = Date.now();
-    console.log('Websocket is open');
-};
-ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    console.log(JSON.stringify(msg, null, 2));
-    const cmd = msg.cmd;
-    if (cmd === 'answer') {
-        receiveAnswer(msg);
-    } else if (cmd === 'offer') {
-        receiveOffer(msg);
-    } else if (cmd === 'candidate') {
-        recieveRemoteCandidate(msg);
-    }
-};
 
-ws.onclose = (event) => {
-    close = Date.now();
-    console.log('WEBSOCKET HAS CLOSED');
-    console.log(event);
-    console.log(`socket lasted: ${(close-start)/1000} seconds`);
+let retry;
+createSocket('wss://juniper.beer');
+let offerTarget;
+let offerDescription;
+const flashes = document.querySelector(".flashes");
+
+function createSocket (url) {
+    ws = new WebSocket(url);
+    ws.onopen = (event) => {
+        start = Date.now();
+        console.log('Websocket is open');
+        clearInterval(retry);
+    };
+    ws.onerror = (e) => {
+        console.log(e.code);
+        window.location.reload();
+    };
+    
+    ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        console.log(JSON.stringify(msg, null, 2));
+        const cmd = msg.cmd;
+        if (cmd === 'answer') {
+            receiveAnswer(msg);
+        } else if (cmd === 'offer') {
+            getVideoFeed(msg);
+        } else if (cmd === 'candidate') {
+            recieveRemoteCandidate(msg);
+        }
+    };
+    
+    ws.onclose = (event) => {
+        close = Date.now();
+        console.log('WEBSOCKET HAS CLOSED');
+        console.log(event);
+        console.log(`socket lasted: ${(close-start)/1000} seconds`);
+        retry = setInterval(() => {
+            createSocket(url);
+            window.location.reload();
+        }, 1000);
+    }
 }
+
 
 
 
@@ -39,11 +60,7 @@ let   audioConnection;
 let   proctorAudio;
 
 const audioConstraints = {
-    audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        sampleRate: 44100
-    }
+    audio: true
 };
 
 const config = {iceServers: [{urls: ["stun:stun.l.google.com:19302"]}]};
@@ -110,6 +127,12 @@ function initParams(){
     // firstname.textContent = name;
 }
 
+function getVideoFeed (msg) {
+    offerTarget = msg.target;
+    offerDescription = msg.description;
+    createFlash(shareScreenBtn, "info");
+}
+
 async function receiveOffer (msg) {
     videoConnection = new RTCPeerConnection(config);
     videoConnection.ontrack = (event) => {
@@ -118,8 +141,7 @@ async function receiveOffer (msg) {
         studentScreen.srcObject = event.streams[0];
     }
 
-    await videoConnection.setRemoteDescription(msg.description);
-
+    await videoConnection.setRemoteDescription(offerDescription);
 
     myVideo = await navigator.mediaDevices.getDisplayMedia({video: true});
 
@@ -130,7 +152,7 @@ async function receiveOffer (msg) {
 
     const res = {
         cmd: 'answer',
-        target: msg.target,
+        target: offerTarget,
         description: videoConnection.localDescription,
         video: true,
     };
@@ -140,7 +162,7 @@ async function receiveOffer (msg) {
         if (event.candidate) {
             const res = {
                 cmd: 'candidate',
-                target: msg.target,
+                target: offerTarget,
                 candidate: event.candidate,
                 video: true,
             };
@@ -148,3 +170,20 @@ async function receiveOffer (msg) {
         }
     };
 }
+
+function createFlash (message, level) {
+    let flash = `
+    <div class="flash flash--${level}">
+        <p class="flash__text">${message}</p>
+        <button class="flash__remove" onClick="this.parentElement.remove()"> &times;</button>
+    </div>
+    `
+    const div = document.createElement("div")
+    div.innerHTML = flash.trim();
+    flash = div.firstChild;
+    flashes.appendChild(flash);
+}
+
+let shareScreenBtn = `
+    <button onclick="recieveOffer();">Share Screen</button>
+`

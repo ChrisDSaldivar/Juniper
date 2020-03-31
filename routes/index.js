@@ -85,10 +85,15 @@ router.put('/course/proctor',
     catchErrors(courseController.addProctor)
 );
 
+router.put('/course/question', 
+    (req, res) => res.sendStatus(200)
+);
+
 // Proctors
 router.get('/proctor/courses', 
     catchErrors(proctorController.getCourses),
 );
+
 
 
 // User accounts

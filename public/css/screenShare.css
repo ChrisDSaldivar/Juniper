@@ -8,15 +8,13 @@
 .stream-container {
     border: 1px solid #999;
     width: 98%;
-    height: 100%;
-    max-width: 1080px;
+    height: 97%;
     background-color: black;
 }
 
 video {
     width: 98%;
-    height: 100%;
-    max-width: 1080px;
+    height: 97%;
 }
 
 h2 {

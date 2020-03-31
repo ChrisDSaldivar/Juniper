@@ -5,7 +5,7 @@ const CourseModel  = new (require('../models/courseModel'));
 exports.studentPage = async (req, res) => {
     console.log(req.session);
     
-    res.render('studentPage', {title: "Courses", isProctor: req.session.isProctor});
+    res.render('studentPage', {title: "Courses", isProctor: req.session.role === 'proctor'});
 };
 
 exports.addCourse = async (req, res) => {

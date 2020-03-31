@@ -49,6 +49,7 @@ exports.joinCourse = async (req, res) => {
     const courseUUID = req.params.courseUUID;
     if (await CourseModel.inClass(req.session.uuid, courseUUID)) {
         req.session.courseUUID = courseUUID;
+        req.session.role = 'student';
         res.render('screenShare');
     } else {
         res.sendStatus(403);
@@ -59,6 +60,7 @@ exports.courseViewer = async (req, res) => {
     const courseUUID = req.params.courseUUID;
     if (await CourseModel.authorizedProctor(req.session.uuid, courseUUID, req.session.isInstructor)) {
         req.session.courseUUID = courseUUID;
+        req.session.role = 'proctor';
         res.render('allScreens', {title: "Active Students"});
     } else {
         res.sendStatus(403);

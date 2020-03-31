@@ -3,13 +3,18 @@ html
   head
     title= `${title} | ${h.siteName}`
     link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/flash.css')
     link(rel='stylesheet', href='/css/screenShare.css')
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet")
   body
     .container
-        h2#courseName
+        h2#info Raise your hand if you have a question
         .stream-container
           video#screen(autoplay)
           audio#voice(autoplay)
+        .controls
+          button#raiseHand Raise Hand
+    .flashes
     script(src="/js/studentStream.js")
+    script(src="/js/raiseHand.js")
