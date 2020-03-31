@@ -114,4 +114,20 @@ exports.addProctor = async (req, res) => {
     }
 
     res.json({courseName: course});
-}
+};
+
+exports.addQuestion = (req, res) => {
+    const {courseUUID, uuid: studentUUID} = req.session;
+    const status = connections.addQuestion(courseUUID, studentUUID) ? 200 : 400;
+    res.sendStatus(status);
+};
+
+exports.getQuestions = async (req, res) => {
+    const {courseUUID} = req.session;
+    if (await CourseModel.authorizedProctor(req.session.uuid, courseUUID, req.session.isInstructor)) {
+        const questions = connections.getQuestions(courseUUID);
+        res.json({questions});
+    } else {
+        res.sendStatus(403);
+    }
+};

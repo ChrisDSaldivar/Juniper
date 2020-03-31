@@ -130,18 +130,29 @@ function initParams(){
 function getVideoFeed (msg) {
     offerTarget = msg.target;
     offerDescription = msg.description;
-    createFlash(shareScreenBtn, "info");
-}
-
-async function receiveOffer (msg) {
     videoConnection = new RTCPeerConnection(config);
+    videoConnection.setRemoteDescription(offerDescription);
     videoConnection.ontrack = (event) => {
         console.log('PROCTOR DID RECEIVE VIDEO TRACK');
         console.log(event.streams[0]);
         studentScreen.srcObject = event.streams[0];
     }
+    videoConnection.onicecandidate = (event) =>{
+        if (event.candidate) {
+            const res = {
+                cmd: 'candidate',
+                target: offerTarget,
+                candidate: event.candidate,
+                video: true,
+            };
+            ws.send(JSON.stringify(res));
+        }
+    };
+    createFlash(shareScreenBtn, "info");
+}
 
-    await videoConnection.setRemoteDescription(offerDescription);
+async function receiveOffer () {
+
 
     myVideo = await navigator.mediaDevices.getDisplayMedia({video: true});
 
@@ -158,17 +169,7 @@ async function receiveOffer (msg) {
     };
     ws.send(JSON.stringify(res));
 
-    videoConnection.onicecandidate = (event) =>{
-        if (event.candidate) {
-            const res = {
-                cmd: 'candidate',
-                target: offerTarget,
-                candidate: event.candidate,
-                video: true,
-            };
-            ws.send(JSON.stringify(res));
-        }
-    };
+
 }
 
 function createFlash (message, level) {
@@ -185,5 +186,5 @@ function createFlash (message, level) {
 }
 
 let shareScreenBtn = `
-    <button onclick="recieveOffer();">Share Screen</button>
+    <button onclick="receiveOffer();">Share Screen</button>
 `

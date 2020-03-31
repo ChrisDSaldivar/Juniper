@@ -85,8 +85,12 @@ router.put('/course/proctor',
     catchErrors(courseController.addProctor)
 );
 
-router.put('/course/question', 
-    (req, res) => res.sendStatus(200)
+router.put('/course/questions', 
+    courseController.addQuestion
+);
+
+router.get('/course/questions', 
+    catchErrors(courseController.getQuestions)
 );
 
 // Proctors

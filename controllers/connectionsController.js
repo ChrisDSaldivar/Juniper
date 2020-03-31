@@ -57,8 +57,36 @@ class ConnectionController {
     addCourse (courseUUID) {
         this.connections[courseUUID] = {
             proctor: {},
-            student: {}
+            student: {},
+            questions: {},
         };
+    }
+
+    addQuestion (courseUUID, studentUUID) {
+        if (this.studentInCourse(courseUUID, studentUUID)) {
+            const questions = this.connections[courseUUID].questions;
+            questions[studentUUID] = {};
+            return true;
+        }
+        return false;
+    }
+
+    removeQuestion (courseUUID, studentUUID) {
+        if (this.studentInCourse(courseUUID, studentUUID)) {
+            delete this.connections[courseUUID].questions[studentUUID];
+        }
+    }
+
+    getQuestions (courseUUID) {
+        let questions = [];
+        if (this.connections[courseUUID]) {
+            questions = Object.keys(this.connections[courseUUID].questions);
+        }
+        return questions;
+    }
+
+    studentInCourse (courseUUID, studentUUID) {
+        return this.connections[courseUUID] && this.connections[courseUUID].student[studentUUID];
     }
 
     // target should be the target ID
@@ -85,6 +113,7 @@ class ConnectionController {
         const {courseUUID, role, id} = ws;
         delete this.info[id];
         delete this.connections[courseUUID][role][id];
+        this.removeQuestion(courseUUID, id);
     }
 
     getStudentIDs (courseUUID) {
