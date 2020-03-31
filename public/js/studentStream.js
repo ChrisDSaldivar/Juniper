@@ -3,7 +3,7 @@ let start;
 let close;
 let retry;
 let target;
-createSocket('wss://juniper.beer');
+createSocket('wss://juniper.beer/socket/course');
 const flashes = document.querySelector(".flashes");
 
 function createSocket (url) {

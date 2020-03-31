@@ -1,6 +1,6 @@
 'use strict';
 
-const ws = new WebSocket("wss://juniper.beer");
+const ws = new WebSocket("wss://juniper.beer/socket/course");
 
 ws.onopen = () => {
     console.log("WebSocket is open now.")

@@ -3,7 +3,7 @@ let start;
 let close;
 
 let retry;
-createSocket('wss://juniper.beer');
+createSocket('wss://juniper.beer/socket/course');
 let offerTarget;
 let offerDescription;
 const flashes = document.querySelector(".flashes");
@@ -187,4 +187,4 @@ function createFlash (message, level) {
 
 let shareScreenBtn = `
     <button onclick="receiveOffer();">Share Screen</button>
-`
+`;

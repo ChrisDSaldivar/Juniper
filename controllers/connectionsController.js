@@ -29,9 +29,9 @@ class ConnectionController {
     async addConnection (ws) {
         // extract session data from ws
         const {courseUUID, role, id, firstName, lastName} = ws;
-        console.log(courseUUID)
-        console.log(role)
-        console.log(id)
+        // console.log(courseUUID)
+        // console.log(role)
+        // console.log(id)
         await redisClient.hset(id, 'firstName', firstName);
         await redisClient.hset(id, 'lastName', lastName);
         
@@ -48,8 +48,8 @@ class ConnectionController {
         // add the socket to our connections  already exists then 
         // this will just replace the old one
         this.connections[courseUUID][role][id] = ws;
-        console.log("New Connection");
-        console.log(this);
+        // console.log("New Connection");
+        // console.log(this);
     }
 
     // helper function to create our course object
@@ -59,7 +59,30 @@ class ConnectionController {
             proctor: {},
             student: {},
             questions: {},
+            freeProctors: {}, // This holds UUIDs of proctors that are waiting to help students
         };
+    }
+
+    addFreeProctor (proctorUUID, courseUUID, ws) {
+        if (!this.connections[courseUUID]) {
+            this.addCourse(courseUUID);
+        }
+        this.connections[courseUUID].freeProctors[proctorUUID] = ws;
+    }
+
+    sendQuestions (courseUUID) {
+        if (this.connections[courseUUID]) {
+            const questions = this.connections[courseUUID].questions;
+            const proctors = this.connections[courseUUID].freeProctors;
+            for (const proctorUUID in proctors) {
+                const socket = proctors[proctorUUID];
+                if (socket.isOpen()) {
+                    proctors[proctorUUID].send(JSON.stringify({questions}));
+                } else if (socket.isClosed()) { 
+                    this.remove(socket);
+                }
+            }
+        }
     }
 
     addQuestion (courseUUID, studentUUID) {

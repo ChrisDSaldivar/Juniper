@@ -1,6 +1,24 @@
 'use strict';
 
-const ws = new WebSocket('wss://juniper.beer');
+const ws = new WebSocket('wss://juniper.beer/socket/screens');
+
+ws.onmessage = (event) => {
+    const {questions} = JSON.parse(event.data);
+    console.log(questions);
+    displayQuestions(questions);
+};
+
+// Just puts red border around students for now
+function displayQuestions (questions) {
+    for (const uuid in questions) {
+        console.log(uuid);
+        const student = document.getElementById(uuid);
+        if (!student) {
+            continue;
+        }
+        student.classList.add("needs-help")
+    }
+}
 
 document.querySelector('body').onload = main;
 let students = [];
@@ -42,7 +60,7 @@ function renderStudents () {
 
         let connectedStudent = document.createElement("div");
         connectedStudent.className = "card";
-        connectedStudent.id = name;
+        connectedStudent.id = id;
         connectedStudent.onclick = function oneOnOne(event){
             const name = event.target.id;
             const id = idMap[name];

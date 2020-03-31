@@ -120,6 +120,7 @@ exports.addQuestion = (req, res) => {
     const {courseUUID, uuid: studentUUID} = req.session;
     const status = connections.addQuestion(courseUUID, studentUUID) ? 200 : 400;
     res.sendStatus(status);
+    connections.sendQuestions(courseUUID);
 };
 
 exports.getQuestions = async (req, res) => {
