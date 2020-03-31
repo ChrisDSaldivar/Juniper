@@ -58,10 +58,10 @@ courseScreensWSS.on('connection', async function connection (ws, req) {
     // Utility functions
     ws.isOpen   = function () { return this.readyState === 1;};
     ws.isClosed = function () { return this.readyState === 3;};
-    
+
     addSessionStateToSocket(ws, req.session);
     connections.addFreeProctor(uuid, courseUUID, ws);
-    connections.sendQuestions(courseUUID);
+    connections.updateProctors(courseUUID);
 });
 
 courseConnectionWSS.on('connection', function connection (ws, req) {

@@ -33,6 +33,10 @@ h1 {
     display: none;
 }
 
+body {
+    text-align: center;
+}
+
 #no-students {
     color: white;
 }

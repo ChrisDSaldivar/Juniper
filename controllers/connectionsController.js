@@ -41,13 +41,18 @@ class ConnectionController {
 
         // setup our lookup table
         this.info[id] = {
-            courseUUID: courseUUID,
-            role: role
+            courseUUID,
+            role,
+            firstName,
+            lastName
         };
 
         // add the socket to our connections  already exists then 
         // this will just replace the old one
         this.connections[courseUUID][role][id] = ws;
+        if (role === "student") {
+            this.updateProctors(courseUUID);
+        }
         // console.log("New Connection");
         // console.log(this);
     }
@@ -97,6 +102,7 @@ class ConnectionController {
     removeQuestion (courseUUID, studentUUID) {
         if (this.studentInCourse(courseUUID, studentUUID)) {
             delete this.connections[courseUUID].questions[studentUUID];
+            this.sendQuestions(courseUUID);
         }
     }
 
@@ -134,9 +140,12 @@ class ConnectionController {
     // just pass the ws on close
     remove (ws) {
         const {courseUUID, role, id} = ws;
+        this.removeQuestion(courseUUID, id);
         delete this.info[id];
         delete this.connections[courseUUID][role][id];
-        this.removeQuestion(courseUUID, id);
+        if (role === "student") {
+            this.updateProctors(courseUUID);
+        }
     }
 
     getStudentIDs (courseUUID) {
@@ -145,6 +154,35 @@ class ConnectionController {
             studentIDs = Object.keys(this.connections[courseUUID].student);
         }
         return studentIDs;
+    }
+
+
+    getConnectedStudents (courseUUID) {
+        const studentInfo = {};
+        const studentIDs = this.getStudentIDs(courseUUID);
+        for (const studentID of studentIDs) {
+            const {firstName, lastName} = this.info[studentID];
+            studentInfo[studentID] = {firstName, lastName};
+        }
+        return studentInfo;
+    }
+
+    sendConnectedStudents (courseUUID) {
+        const studentInfo = this.getConnectedStudents(courseUUID);
+        const proctors = this.connections[courseUUID].freeProctors;
+        for (const proctorUUID in proctors) {
+            const socket = proctors[proctorUUID];
+            if (socket.isOpen()) {
+                proctors[proctorUUID].send(JSON.stringify({studentInfo}));
+            } else if (socket.isClosed()) { 
+                this.remove(socket);
+            }
+        }
+    }
+
+    updateProctors (courseUUID) {
+        this.sendConnectedStudents(courseUUID);
+        this.sendQuestions(courseUUID);
     }
 }
 
